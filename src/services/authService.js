@@ -1,63 +1,91 @@
-import api from './api';
+import axios from 'axios';
 
-export const authService = {
-    // Register new user
+const API_URL = import.meta.env.VITE_API_URL || 'https://your-backend.vercel.app';
+
+const api = axios.create({
+    baseURL: `${API_URL}/api/v1`,
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    withCredentials: true, // Important for CORS
+});
+
+// Add token to requests
+api.interceptors.request.use((config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+});
+
+const authService = {
+    // Google Login
+    googleLogin: async (credential) => {
+        try {
+            const response = await api.post('/auth/google', { credential });
+            return response.data;
+        } catch (error) {
+            console.error('Google login error:', error.response?.data || error.message);
+            throw error;
+        }
+    },
+
+    // Regular Login
+    login: async (userData) => {
+        const response = await api.post('/auth/login', userData);
+        return response.data;
+    },
+
+    // Register
     register: async (userData) => {
         const response = await api.post('/auth/register', userData);
-        if (response.data.token) {
-            localStorage.setItem('token', response.data.token);
-            localStorage.setItem('user', JSON.stringify(response.data.user));
-        }
         return response.data;
     },
+};
 
-    // Login user
-    login: async (credentials) => {
-        const response = await api.post('/auth/login', credentials);
-        if (response.data.token) {
-            localStorage.setItem('token', response.data.token);
-            localStorage.setItem('user', JSON.stringify(response.data.user));
-        }
-        return response.data;
+export default authService;import axios from 'axios';
+
+const API_URL = import.meta.env.VITE_API_URL || 'https://your-backend.vercel.app';
+
+const api = axios.create({
+    baseURL: `${API_URL}/api/v1`,
+    headers: {
+        'Content-Type': 'application/json',
     },
+    withCredentials: true, // Important for CORS
+});
 
+// Add token to requests
+api.interceptors.request.use((config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+});
+
+const authService = {
     // Google Login
-    googleLogin: async (token) => {
-        const response = await api.post('/auth/google', { token });
-        if (response.data.token) {
-            localStorage.setItem('token', response.data.token);
-            localStorage.setItem('user', JSON.stringify(response.data.user));
+    googleLogin: async (credential) => {
+        try {
+            const response = await api.post('/auth/google', { credential });
+            return response.data;
+        } catch (error) {
+            console.error('Google login error:', error.response?.data || error.message);
+            throw error;
         }
+    },
+
+    // Regular Login
+    login: async (userData) => {
+        const response = await api.post('/auth/login', userData);
         return response.data;
     },
 
-    // Logout user
-    logout: () => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-    },
-
-    // Get current user
-    getMe: async () => {
-        const response = await api.get('/auth/me');
-        return response.data;
-    },
-
-    // Update profile
-    updateProfile: async (userData) => {
-        const response = await api.put('/auth/update-profile', userData);
-        return response.data;
-    },
-
-    // Update password
-    updatePassword: async (passwords) => {
-        const response = await api.put('/auth/update-password', passwords);
-        return response.data;
-    },
-
-    // Add address
-    addAddress: async (address) => {
-        const response = await api.post('/auth/address', address);
+    // Register
+    register: async (userData) => {
+        const response = await api.post('/auth/register', userData);
         return response.data;
     },
 };
