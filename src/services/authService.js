@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL || 'https://your-backend.vercel.app';
+const API_URL = import.meta.env.VITE_API_URL || 'https://new-project-1-beta-one.vercel.app/api/v1https://your-backend.vercel.app';
 
 const api = axios.create({
     baseURL: `${API_URL}/api/v1`,
@@ -44,9 +44,9 @@ const authService = {
     },
 };
 
-export default authService;import axios from 'axios';
+export default authService; import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL || 'https://your-backend.vercel.app';
+const API_URL = import.meta.env.VITE_API_URL || 'https://new-project-1-beta-one.vercel.app/api/v1://your-backend.vercel.app';
 
 const api = axios.create({
     baseURL: `${API_URL}/api/v1`,
