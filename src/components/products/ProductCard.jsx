@@ -1,0 +1,128 @@
+import { memo } from 'react';
+import { motion } from 'framer-motion';
+import { useDispatch } from 'react-redux';
+import { useNavigate, Link } from 'react-router-dom';
+import { addItemToCart } from '../../redux/slices/cartSlice';
+import { toast } from 'react-toastify';
+import { useTilt } from '../../hooks/useTilt';
+import { ShoppingCart, Eye } from 'lucide-react';
+
+const ProductCard = memo(({ product }) => {
+    const { rotateX, rotateY, onMouseMove, onMouseLeave } = useTilt(12);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    const handleAddToCart = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        dispatch(addItemToCart({
+            productId: product._id,
+            quantity: 1,
+            color: product.colors?.[0]?.name || 'Default'
+        })).then((result) => {
+            if (!result.error) {
+                toast.success(`${product.name} added to cart!`);
+            } else {
+                toast.error(result.payload || 'Failed to add to cart');
+            }
+        });
+    };
+
+    // Fallback image in case the main one fails
+    const fallbackImage = 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800';
+
+    return (
+        <motion.div
+            layout
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true, margin: "-50px" }}
+            whileHover={{ y: -8 }}
+            transition={{ duration: 0.4 }}
+            className="group relative will-change-transform"
+        >
+            <Link to={`/product/${product._id}`} className="block h-full">
+                <div
+                    onMouseMove={onMouseMove}
+                    onMouseLeave={onMouseLeave}
+                    className="relative bg-background-alt border border-border rounded-[2rem] overflow-hidden transition-all duration-500 group-hover:border-primary/50 group-hover:shadow-glow-strong h-full flex flex-col"
+                    style={{ transformStyle: 'preserve-3d', rotateX, rotateY }}
+                >
+                    {/* Badge */}
+                    {product.featured && (
+                        <div className="absolute top-4 left-4 z-20 px-3 py-1 bg-primary/90 backdrop-blur-md rounded-xl text-white shadow-lg">
+                            <span className="text-[10px] font-black uppercase tracking-widest">New</span>
+                        </div>
+                    )}
+
+                    {/* Image Layer */}
+                    <div className="relative aspect-[4/5] p-8 flex items-center justify-center overflow-hidden bg-gradient-to-b from-transparent to-black/5 dark:to-white/5">
+                        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+
+                        <img
+                            src={product.images?.[0] || fallbackImage}
+                            alt={product.name}
+                            loading="lazy"
+                            className="w-full h-full object-contain mb-4 transition-transform duration-700 ease-out group-hover:scale-110 drop-shadow-2xl"
+                            style={{ transform: 'translateZ(30px)' }}
+                            onError={(e) => {
+                                e.target.onerror = null; // Prevent infinite loop
+                                e.target.src = fallbackImage;
+                            }}
+                        />
+
+                        {/* Action Overlays */}
+                        <div className="absolute inset-x-4 bottom-4 translate-y-[120%] group-hover:translate-y-0 transition-transform duration-500 ease-out z-30 flex gap-2">
+                            <button
+                                onClick={handleAddToCart}
+                                disabled={product.stock === 0}
+                                className="flex-1 h-12 bg-primary text-white rounded-xl flex items-center justify-center gap-2 hover:bg-primary/90 transition-colors shadow-lg active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                <ShoppingCart size={18} />
+                                <span className="font-bold text-sm">Add</span>
+                            </button>
+                            <button
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    navigate(`/product/${product._id}`);
+                                }}
+                                className="w-12 h-12 bg-background/80 backdrop-blur-md border border-border text-foreground rounded-xl flex items-center justify-center hover:bg-background transition-colors active:scale-95 hover:text-primary"
+                            >
+                                <Eye size={18} />
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Info Area */}
+                    <div className="p-5 pt-2 flex-grow flex flex-col justify-end bg-background-alt relative z-10">
+                        <div className="mb-2">
+                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">{product.category}</span>
+                        </div>
+
+                        <h3 className="text-lg font-bold text-foreground mb-3 leading-tight group-hover:text-primary transition-colors line-clamp-2">
+                            {product.name}
+                        </h3>
+
+                        <div className="flex items-center justify-between mt-auto">
+                            <div className="flex items-baseline gap-2">
+                                <span className="text-xl font-black text-foreground">${product.price}</span>
+                                {product.originalPrice > product.price && (
+                                    <span className="text-xs text-muted-foreground line-through font-bold">${product.originalPrice}</span>
+                                )}
+                            </div>
+                            <div className="flex items-center gap-1 bg-background px-2 py-1 rounded-lg border border-border">
+                                <span className="text-xs font-bold text-foreground">{product.ratings?.average || 5}</span>
+                                <span className="text-primary text-[10px]">★</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </Link>
+        </motion.div>
+    );
+});
+
+ProductCard.displayName = 'ProductCard';
+
+export default ProductCard;
