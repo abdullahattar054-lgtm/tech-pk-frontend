@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { setTheme } from './redux/slices/themeSlice';
 import { AnimatePresence, motion } from 'framer-motion';
+import { SpeedInsights } from "@vercel/speed-insights/react";
 
 // Pages
 import Home from './pages/Home';
@@ -95,6 +96,7 @@ function App() {
                     </motion.div>
                 </AnimatePresence>
             </main>
+            <SpeedInsights />
             <Footer />
             <ScrollToTop />
         </div>

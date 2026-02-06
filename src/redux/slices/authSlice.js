@@ -29,6 +29,20 @@ export const register = createAsyncThunk(
     }
 );
 
+export const googleLogin = createAsyncThunk(
+    'auth/googleLogin',
+    async (token, { rejectWithValue }) => {
+        try {
+            const data = await authService.googleLogin(token);
+            localStorage.setItem('token', data.token);
+            localStorage.setItem('user', JSON.stringify(data.user));
+            return data;
+        } catch (error) {
+            return rejectWithValue(error.response?.data?.message || error.message);
+        }
+    }
+);
+
 const getSafeUserData = () => {
     try {
         const user = localStorage.getItem('user');
@@ -95,6 +109,21 @@ const authSlice = createSlice({
                 state.token = action.payload.token;
             })
             .addCase(register.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+            // Google Login
+            .addCase(googleLogin.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(googleLogin.fulfilled, (state, action) => {
+                state.loading = false;
+                state.isAuthenticated = true;
+                state.user = action.payload.user;
+                state.token = action.payload.token;
+            })
+            .addCase(googleLogin.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
             });

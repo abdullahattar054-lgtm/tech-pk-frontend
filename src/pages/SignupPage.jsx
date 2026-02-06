@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { register } from '../redux/slices/authSlice';
 import { toast } from 'react-toastify';
+import { Eye, EyeOff } from 'lucide-react';
 
 const SignupPage = () => {
     const [formData, setFormData] = useState({
@@ -11,6 +12,9 @@ const SignupPage = () => {
         password: '',
         confirmPassword: ''
     });
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { loading } = useSelector((state) => state.auth);
@@ -72,42 +76,60 @@ const SignupPage = () => {
             <div className="card p-8 w-full max-w-md">
                 <h1 className="text-display text-center mb-8">Create Account</h1>
                 <form onSubmit={handleSubmit} className="space-y-4">
-                    <input 
-                        type="text" 
+                    <input
+                        type="text"
                         name="name"
                         value={formData.name}
                         onChange={handleChange}
-                        placeholder="Full Name" 
-                        className="input-field" 
-                        required 
+                        placeholder="Full Name"
+                        className="input-field"
+                        required
                     />
-                    <input 
-                        type="email" 
+                    <input
+                        type="email"
                         name="email"
                         value={formData.email}
                         onChange={handleChange}
-                        placeholder="Email" 
-                        className="input-field" 
-                        required 
+                        placeholder="Email"
+                        className="input-field"
+                        required
                     />
-                    <input 
-                        type="password" 
-                        name="password"
-                        value={formData.password}
-                        onChange={handleChange}
-                        placeholder="Password" 
-                        className="input-field" 
-                        required 
-                    />
-                    <input 
-                        type="password" 
-                        name="confirmPassword"
-                        value={formData.confirmPassword}
-                        onChange={handleChange}
-                        placeholder="Confirm Password" 
-                        className="input-field" 
-                        required 
-                    />
+                    <div className="relative">
+                        <input
+                            type={showPassword ? "text" : "password"}
+                            name="password"
+                            value={formData.password}
+                            onChange={handleChange}
+                            placeholder="Password"
+                            className="input-field pr-10"
+                            required
+                        />
+                        <button
+                            type="button"
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                            onClick={() => setShowPassword(!showPassword)}
+                        >
+                            {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                        </button>
+                    </div>
+                    <div className="relative">
+                        <input
+                            type={showConfirmPassword ? "text" : "password"}
+                            name="confirmPassword"
+                            value={formData.confirmPassword}
+                            onChange={handleChange}
+                            placeholder="Confirm Password"
+                            className="input-field pr-10"
+                            required
+                        />
+                        <button
+                            type="button"
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        >
+                            {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                        </button>
+                    </div>
                     <button type="submit" className="btn-primary w-full" disabled={loading}>
                         {loading ? 'Creating Account...' : 'Sign Up'}
                     </button>

@@ -1,14 +1,33 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { login } from '../redux/slices/authSlice';
+import { login, googleLogin } from '../redux/slices/authSlice';
 import { toast } from 'react-toastify';
+import { useGoogleLogin } from '@react-oauth/google';
+import { Eye, EyeOff } from 'lucide-react';
+import { FcGoogle } from 'react-icons/fc';
 
 const LoginPage = () => {
     const [formData, setFormData] = useState({ email: '', password: '' });
+    const [showPassword, setShowPassword] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { loading } = useSelector((state) => state.auth);
+
+    const loginWithGoogle = useGoogleLogin({
+        onSuccess: async (tokenResponse) => {
+            const result = await dispatch(googleLogin(tokenResponse.access_token));
+            if (!result.error) {
+                toast.success('Login successful!');
+                navigate('/');
+            } else {
+                toast.error(result.payload || 'Google Login failed');
+            }
+        },
+        onError: () => {
+            toast.error('Google Sign In was unsuccessful. Try again later');
+        }
+    });
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -57,14 +76,23 @@ const LoginPage = () => {
                     </div>
                     <div>
                         <label className="block font-medium mb-2">Password</label>
-                        <input
-                            type="password"
-                            name="password"
-                            className="input-field"
-                            value={formData.password}
-                            onChange={handleChange}
-                            required
-                        />
+                        <div className="relative">
+                            <input
+                                type={showPassword ? 'text' : 'password'}
+                                name="password"
+                                className="input-field pr-10"
+                                value={formData.password}
+                                onChange={handleChange}
+                                required
+                            />
+                            <button
+                                type="button"
+                                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                                onClick={() => setShowPassword(!showPassword)}
+                            >
+                                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                            </button>
+                        </div>
                     </div>
                     <div className="flex items-center justify-between">
                         <label className="flex items-center">
@@ -78,6 +106,26 @@ const LoginPage = () => {
                     <button type="submit" className="btn-primary w-full" disabled={loading}>
                         {loading ? 'Logging in...' : 'Login'}
                     </button>
+
+                    <div className="relative my-6">
+                        <div className="absolute inset-0 flex items-center">
+                            <div className="w-full border-t border-gray-300 dark:border-gray-600"></div>
+                        </div>
+                        <div className="relative flex justify-center text-sm">
+                            <span className="px-4 bg-white dark:bg-card-dark text-gray-500 font-medium">Or continue with</span>
+                        </div>
+                    </div>
+
+                    <div className="flex justify-center">
+                        <button
+                            type="button"
+                            onClick={() => loginWithGoogle()}
+                            className="w-full flex items-center justify-center gap-3 bg-white dark:bg-dark-bg border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200 font-semibold py-2.5 px-4 rounded-xl transition-all duration-200 shadow-sm"
+                        >
+                            <FcGoogle size={24} />
+                            Sign in with Google
+                        </button>
+                    </div>
                 </form>
                 <p className="text-center mt-6 text-gray-600 dark:text-gray-400">
                     Don't have an account?{' '}
