@@ -1,6 +1,6 @@
 // Application Constants
 
-export const API_URL = import.meta.env.VITE_API_URL || 'https://new-project-1-beta-one.vercel.app';
+export const API_URL = (import.meta.env.VITE_API_URL || 'https://new-project-1-beta-one.vercel.app').trim();
 export const SITE_NAME = import.meta.env.VITE_SITE_NAME || 'TECH.PK';
 
 // Product Categories
