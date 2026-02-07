@@ -45,7 +45,7 @@ const Hero = () => {
                 className="absolute inset-0 z-0 bg-mesh-gradient opacity-40 dark:opacity-60"
             />
 
-            {/* Layer 2: 3D Scene Background - Only on Desktop */}
+            {/* Layer 2: 3D Scene Background - Only render on Desktop */}
             {!isMobile && <Hero3D />}
 
             {/* Layer 3: Particles - Enhanced for mobile with more particles */}
@@ -59,7 +59,7 @@ const Hero = () => {
             />
 
             {/* Layer 4: Foreground Content */}
-            <div className={`container-custom relative z-10 ${isMobile ? 'px-5' : ''}`}>
+            <div className={`container-custom relative z-10 ${isMobile ? 'px-5 pt-20' : ''}`}>
                 <div className={`grid ${isMobile ? 'grid-cols-1 text-center' : 'grid-cols-1 lg:grid-cols-2 gap-12'} items-center`}>
                     <motion.div
                         initial="hidden"
