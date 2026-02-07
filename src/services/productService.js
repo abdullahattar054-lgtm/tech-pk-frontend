@@ -1,5 +1,4 @@
 import api from './api';
-
 import { mockProducts } from '../data/mockProducts';
 
 export const productService = {
@@ -9,7 +8,8 @@ export const productService = {
             const response = await api.get('/products', { params });
             return response.data;
         } catch (error) {
-            console.warn('API unavailable, using mock data');
+            console.error('❌ Products API Error:', error.response?.status, error.response?.data || error.message);
+            console.warn('⚠️ Falling back to mock data due to API error');
 
             // Client-side filtering for mock data
             let filteredDocs = [...mockProducts];
@@ -40,7 +40,8 @@ export const productService = {
                 success: true,
                 count: filteredDocs.length,
                 pagination: {},
-                data: filteredDocs
+                data: filteredDocs,
+                _isMockData: true // Flag to indicate this is mock data
             };
         }
     },
@@ -51,11 +52,13 @@ export const productService = {
             const response = await api.get(`/products/${id}`);
             return response.data;
         } catch (error) {
-            console.warn('API unavailable, using mock data');
+            console.error('❌ Product API Error:', error.response?.status, error.response?.data || error.message);
+            console.warn('⚠️ Falling back to mock data due to API error');
             const product = mockProducts.find(p => p._id === id);
             return {
                 success: true,
-                data: product || mockProducts[0]
+                data: product || mockProducts[0],
+                _isMockData: true
             };
         }
     },
@@ -66,12 +69,14 @@ export const productService = {
             const response = await api.get(`/products/category/${category}`);
             return response.data;
         } catch (error) {
-            console.warn('API unavailable, using mock data');
+            console.error('❌ Category API Error:', error.response?.status, error.response?.data || error.message);
+            console.warn('⚠️ Falling back to mock data due to API error');
             const filtered = mockProducts.filter(p => p.category === category);
             return {
                 success: true,
                 count: filtered.length,
-                data: filtered
+                data: filtered,
+                _isMockData: true
             };
         }
     },
@@ -82,10 +87,12 @@ export const productService = {
             const response = await api.get('/products', { params: { search: query } });
             return response.data;
         } catch (error) {
-            console.warn('API unavailable, using mock data');
+            console.error('❌ Search API Error:', error.response?.status, error.response?.data || error.message);
+            console.warn('⚠️ Falling back to mock data due to API error');
             return {
                 success: true,
-                data: mockProducts
+                data: mockProducts,
+                _isMockData: true
             };
         }
     },
