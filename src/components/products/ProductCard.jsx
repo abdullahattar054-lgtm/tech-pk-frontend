@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useDispatch } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
@@ -11,6 +11,12 @@ const ProductCard = memo(({ product }) => {
     const { rotateX, rotateY, onMouseMove, onMouseLeave } = useTilt(12);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const [selectedColor, setSelectedColor] = useState(product.colors?.[0]?.name || '');
+    const [hoveredColor, setHoveredColor] = useState(null);
+
+    const activeColor = hoveredColor || selectedColor;
+    const currentVariant = product.colors?.find(c => c.name === activeColor) || product.colors?.[0];
+    const displayImage = currentVariant?.images?.[0] || product.images?.[0];
 
     const handleAddToCart = (e) => {
         e.preventDefault();
@@ -19,10 +25,10 @@ const ProductCard = memo(({ product }) => {
         dispatch(addItemToCart({
             productId: product._id,
             quantity: 1,
-            color: product.colors?.[0]?.name || 'Default'
+            color: selectedColor
         })).then((result) => {
             if (!result.error) {
-                toast.success(`${product.name} added to cart!`);
+                toast.success(`${product.name} (${selectedColor}) added to cart!`);
             } else {
                 toast.error(result.payload || 'Failed to add to cart');
             }
@@ -61,10 +67,10 @@ const ProductCard = memo(({ product }) => {
                         <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
 
                         <img
-                            src={product.images?.[0] || fallbackImage}
+                            src={displayImage || fallbackImage}
                             alt={product.name}
                             loading="lazy"
-                            className="w-full h-full object-contain mb-4 transition-transform duration-700 ease-out group-hover:scale-110 drop-shadow-2xl"
+                            className="w-full h-full object-contain mb-4 transition-all duration-500 ease-out group-hover:scale-110 drop-shadow-2xl"
                             style={{ transform: 'translateZ(30px)' }}
                             onError={(e) => {
                                 e.target.onerror = null; // Prevent infinite loop
@@ -100,9 +106,34 @@ const ProductCard = memo(({ product }) => {
                             <span className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">{product.category}</span>
                         </div>
 
-                        <h3 className="text-lg font-bold text-foreground mb-3 leading-tight group-hover:text-primary transition-colors line-clamp-2">
+                        <h3 className="text-lg font-bold text-foreground mb-4 leading-tight group-hover:text-primary transition-colors line-clamp-1">
                             {product.name}
                         </h3>
+
+                        {/* Color Swatches */}
+                        {product.colors && product.colors.length > 1 && (
+                            <div className="flex gap-2 mb-4" onClick={(e) => e.preventDefault()}>
+                                {product.colors.map((color) => (
+                                    <button
+                                        key={color.name}
+                                        onMouseEnter={() => setHoveredColor(color.name)}
+                                        onMouseLeave={() => setHoveredColor(null)}
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            e.stopPropagation();
+                                            setSelectedColor(color.name);
+                                        }}
+                                        className={`w-6 h-6 rounded-full border-2 transition-all duration-300 ${selectedColor === color.name ? 'border-primary scale-110 shadow-glow' : 'border-transparent hover:scale-110'}`}
+                                        title={color.name}
+                                    >
+                                        <div
+                                            className="w-full h-full rounded-full border border-white/10"
+                                            style={{ backgroundColor: color.value }}
+                                        />
+                                    </button>
+                                ))}
+                            </div>
+                        )}
 
                         <div className="flex items-center justify-between mt-auto">
                             <div className="flex items-baseline gap-2">

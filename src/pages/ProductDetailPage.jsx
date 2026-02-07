@@ -174,19 +174,23 @@ const ProductDetailPage = () => {
 
                             <div className="space-y-8 mb-10">
                                 <div>
-                                    <label className="block text-muted-foreground font-bold uppercase tracking-wider text-xs mb-4">Select Color</label>
-                                    <div className="flex gap-4">
+                                    <label className="block text-muted-foreground font-bold uppercase tracking-wider text-[10px] mb-6">Select <span className="text-primary">Finish</span> — {selectedColor}</label>
+                                    <div className="flex flex-wrap gap-5">
                                         {product.colors?.map((color) => (
                                             <button
                                                 key={color.name}
                                                 onClick={() => setSelectedColor(color.name)}
-                                                className={`group flex items-center gap-3 px-6 py-3 rounded-xl border-2 font-bold transition-all ${selectedColor === color.name ? 'bg-primary border-primary text-white shadow-lg' : 'bg-secondary border-border text-muted-foreground hover:border-primary/50'}`}
+                                                className={`relative group p-1 rounded-full border-2 transition-all duration-300 ${selectedColor === color.name ? 'border-primary scale-110 shadow-glow' : 'border-transparent hover:scale-110 hover:border-primary/30'}`}
                                             >
-                                                <span
-                                                    className="w-4 h-4 rounded-full border border-white/20"
+                                                <div
+                                                    className="w-12 h-12 rounded-full border-2 border-white/10 shadow-inner flex items-center justify-center overflow-hidden"
                                                     style={{ backgroundColor: color.value }}
-                                                />
-                                                {color.name}
+                                                >
+                                                    <div className="absolute inset-0 bg-gradient-to-tr from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                                                </div>
+                                                <span className="absolute -top-10 left-1/2 -translate-x-1/2 px-3 py-1 bg-background-alt border border-border rounded-lg text-[10px] font-black uppercase tracking-widest opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all pointer-events-none whitespace-nowrap z-30">
+                                                    {color.name}
+                                                </span>
                                             </button>
                                         ))}
                                     </div>
