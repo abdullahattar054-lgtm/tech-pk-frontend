@@ -10,7 +10,7 @@ const blogPosts = [
         category: 'Technology',
         date: 'Feb 3, 2025',
         readTime: '5 min read',
-        image: '/images/products/black-earbuds-pro.jpg'
+        image: 'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=800&q=80'
     },
     {
         id: 2,
@@ -19,7 +19,7 @@ const blogPosts = [
         category: 'Guides',
         date: 'Jan 28, 2025',
         readTime: '8 min read',
-        image: '/images/products/black-smart-watch.jpg'
+        image: 'https://images.unsplash.com/photo-1579586337278-3befd40fd17a?w=800&q=80'
     },
     {
         id: 3,
@@ -28,7 +28,7 @@ const blogPosts = [
         category: 'Comparison',
         date: 'Jan 20, 2025',
         readTime: '6 min read',
-        image: '/images/products/black-green-headphones.png'
+        image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&q=80'
     },
     {
         id: 4,
@@ -37,7 +37,7 @@ const blogPosts = [
         category: 'Technology',
         date: 'Jan 15, 2025',
         readTime: '4 min read',
-        image: '/images/products/white-earbuds-pro.jpg'
+        image: 'https://images.unsplash.com/photo-1484704849700-f032a568e944?w=800&q=80'
     }
 ];
 
@@ -64,7 +64,7 @@ const BlogPage = () => {
 
                 {/* Blog Grid */}
                 <motion.div
-                    className="grid grid-cols-1 md:grid-cols-2 gap-8"
+                    className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8"
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true, margin: "-50px" }}
@@ -85,42 +85,43 @@ const BlogPage = () => {
                             }}
                             transition={{ duration: 0.5 }}
                             whileHover={{ y: -5 }}
-                            className="group bg-background-alt border border-border rounded-3xl overflow-hidden hover:border-primary/50 transition-all duration-300"
+                            className="group bg-background-alt border border-border rounded-2xl md:rounded-3xl overflow-hidden hover:border-primary/50 transition-all duration-300"
                         >
                             {/* Image */}
-                            <div className="aspect-video overflow-hidden bg-black/20">
+                            <div className="aspect-[16/10] md:aspect-video overflow-hidden bg-black/20">
                                 <img
                                     src={post.image}
                                     alt={post.title}
                                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                    loading="lazy"
                                 />
                             </div>
 
                             {/* Content */}
-                            <div className="p-8">
-                                <div className="flex items-center gap-4 mb-4">
+                            <div className="p-5 md:p-8">
+                                <div className="flex flex-wrap items-center gap-2 md:gap-4 mb-3 md:mb-4">
                                     <span className="px-3 py-1 bg-primary/10 text-primary text-xs font-bold rounded-full">
                                         {post.category}
                                     </span>
-                                    <div className="flex items-center gap-2 text-muted-foreground text-sm">
+                                    <div className="flex items-center gap-2 text-muted-foreground text-xs md:text-sm">
                                         <Calendar size={14} />
                                         {post.date}
                                     </div>
-                                    <div className="flex items-center gap-2 text-muted-foreground text-sm">
+                                    <div className="flex items-center gap-2 text-muted-foreground text-xs md:text-sm">
                                         <Clock size={14} />
                                         {post.readTime}
                                     </div>
                                 </div>
 
-                                <h2 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors line-clamp-2">
+                                <h2 className="text-lg md:text-xl font-bold mb-2 md:mb-3 group-hover:text-primary transition-colors line-clamp-2">
                                     {post.title}
                                 </h2>
 
-                                <p className="text-muted-foreground mb-6 line-clamp-2">
+                                <p className="text-muted-foreground text-sm md:text-base mb-4 md:mb-6 line-clamp-2">
                                     {post.excerpt}
                                 </p>
 
-                                <button className="flex items-center gap-2 text-primary font-bold group-hover:gap-3 transition-all">
+                                <button className="flex items-center gap-2 text-primary font-bold group-hover:gap-3 transition-all text-sm md:text-base">
                                     Read More
                                     <ArrowRight size={18} />
                                 </button>

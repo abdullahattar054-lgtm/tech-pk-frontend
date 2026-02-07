@@ -101,8 +101,18 @@ const Hero = () => {
                     </motion.div>
                 </motion.div>
 
-                {/* Right side area */}
-                <div className="relative flex justify-center items-center h-[500px]">
+                {/* Right side area - Show image on mobile since 3D is hidden */}
+                <div className="relative flex justify-center items-center h-[300px] md:h-[500px]">
+                    {isMobile && (
+                        <motion.img
+                            initial={{ opacity: 0, scale: 0.8, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            transition={{ duration: 0.8, delay: 0.5 }}
+                            src={heroAirpods}
+                            alt="Premium Audio"
+                            className="w-full max-w-[280px] h-auto object-contain drop-shadow-2xl"
+                        />
+                    )}
                 </div>
             </div>
 

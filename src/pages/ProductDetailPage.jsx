@@ -94,7 +94,7 @@ const ProductDetailPage = () => {
         <h2 className="text-3xl font-bold mb-4">Product Not Found</h2>
         <Link to="/products" className="btn-primary">Back to Collection</Link>
     </div>;
-    if (!product) return null;
+    if (!product) return <div className="min-h-screen flex items-center justify-center bg-background"><Loader show={true} /></div>;
 
     return (
         <motion.div
@@ -107,7 +107,6 @@ const ProductDetailPage = () => {
                     {/* Product Images */}
                     <div className="space-y-6" data-aos="fade-right">
                         <motion.div
-                            layoutId={`product-image-${product._id}`}
                             className="aspect-square bg-background-alt border border-border rounded-[2.5rem] overflow-hidden flex items-center justify-center p-8 group relative"
                         >
                             <AnimatePresence mode="wait">

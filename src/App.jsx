@@ -51,8 +51,7 @@ function App() {
             easing: 'ease-out-cubic',
             once: true,
             mirror: false,
-            offset: 30,
-            disable: window.innerWidth < 768
+            offset: 30
         });
     }, [dispatch]);
 
