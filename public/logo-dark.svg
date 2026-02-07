@@ -1,0 +1,10 @@
+<svg width="180" height="40" viewBox="0 0 180 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Tech Icon -->
+  <rect x="2" y="4" width="32" height="32" rx="8" fill="#0066FF"/>
+  <path d="M12 14H24M18 14V26" stroke="white" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="28" cy="8" r="3" fill="#00FF88"/>
+  
+  <!-- Text -->
+  <text x="44" y="28" fill="#F8FAFC" font-family="Inter, sans-serif" font-size="24" font-weight="900" letter-spacing="-0.05em">TECH</text>
+  <text x="112" y="28" fill="#0066FF" font-family="Inter, sans-serif" font-size="24" font-weight="500" letter-spacing="-0.02em">.PK</text>
+</svg>

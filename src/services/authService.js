@@ -1,10 +1,10 @@
 import api from './api';
 
 const authService = {
-    googleLogin: async (credential) => {
+    googleLogin: async (token) => {
         try {
             console.log('📡 Sending Google credential to backend...');
-            const response = await api.post('/auth/google', { credential });
+            const response = await api.post('/auth/google', { credential: token });
             console.log('✅ Google login successful:', response.data);
             return response.data;
         } catch (error) {

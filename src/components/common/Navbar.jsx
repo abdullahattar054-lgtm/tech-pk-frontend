@@ -27,11 +27,12 @@ const Navbar = () => {
             <div className="container-custom">
                 <div className="flex items-center justify-between h-20">
                     {/* Logo */}
-                    <Link to="/" className="text-2xl font-black tracking-tighter text-foreground flex items-center gap-2">
-                        <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                            <span className="text-xs text-white">T</span>
-                        </div>
-                        <span className="text-gradient">TECH.PK</span>
+                    <Link to="/" className="flex items-center gap-2 group transition-all duration-300">
+                        <img
+                            src={mode === 'dark' ? '/logo-dark.svg' : '/logo.svg'}
+                            alt="TECH.PK"
+                            className="h-8 md:h-9 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+                        />
                     </Link>
 
                     {/* Navigation Links */}
