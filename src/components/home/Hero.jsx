@@ -46,8 +46,8 @@ const Hero = () => {
                 className="absolute inset-0 z-0 bg-mesh-gradient opacity-40 dark:opacity-60"
             />
 
-            {/* Layer 2: 3D Scene Background/Overlay */}
-            <Hero3D isMobile={isMobile} />
+            {/* Layer 2: 3D Scene Background/Overlay - Only on Desktop */}
+            {!isMobile && <Hero3D />}
 
             {/* Layer 3: Particles - Reduced density on mobile */}
             <Particles color="#0066FF" density={isMobile ? 15 : 40} />
@@ -101,8 +101,18 @@ const Hero = () => {
                     </motion.div>
                 </motion.div>
 
-                {/* Right side area */}
+                {/* Right side area - Show image on mobile since 3D is hidden */}
                 <div className="relative flex justify-center items-center h-[300px] md:h-[500px]">
+                    {isMobile && (
+                        <motion.img
+                            initial={{ opacity: 0, scale: 0.8, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            transition={{ duration: 0.8, delay: 0.5 }}
+                            src={heroAirpods}
+                            alt="Premium Audio"
+                            className="w-full max-w-[280px] h-auto object-contain drop-shadow-2xl"
+                        />
+                    )}
                 </div>
             </div>
 
