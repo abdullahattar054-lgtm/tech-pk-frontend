@@ -3,7 +3,6 @@ import { useTilt } from '../../hooks/useTilt';
 import { useWindowSize } from '../../hooks/useWindowSize';
 import Particles from '../animations/Particles';
 import Hero3D from '../animations/Hero3D';
-import heroAirpods from '../../assets/images/hero-airpods.png';
 
 const Hero = () => {
     const { scrollY } = useScroll();
@@ -46,88 +45,97 @@ const Hero = () => {
                 className="absolute inset-0 z-0 bg-mesh-gradient opacity-40 dark:opacity-60"
             />
 
-            {/* Layer 2: 3D Scene Background/Overlay - Only on Desktop */}
+            {/* Layer 2: 3D Scene Background - Only on Desktop */}
             {!isMobile && <Hero3D />}
 
-            {/* Layer 3: Particles - Reduced density on mobile */}
-            <Particles color="#0066FF" density={isMobile ? 15 : 40} />
+            {/* Layer 3: Particles - Enhanced for mobile with more particles */}
+            <Particles
+                color="#0066FF"
+                density={isMobile ? 70 : 40}
+                speed={isMobile ? 0.5 : 1}
+                opacity={isMobile ? 0.5 : 0.4}
+                isMobile={isMobile}
+                connectDistance={isMobile ? 0 : 100}
+            />
 
             {/* Layer 4: Foreground Content */}
-            <div className="container-custom relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center pointer-events-none">
-                <motion.div
-                    initial="hidden"
-                    animate="visible"
-                    variants={containerVariants}
-                    className="text-left pointer-events-auto"
-                >
-                    <motion.div variants={headlineVariants} className="overflow-hidden">
-                        <h1 className="text-hero leading-none mb-6 text-foreground tracking-tighter">
-                            Future of <br />
-                            <span className="text-gradient">Pure Sound.</span>
-                        </h1>
-                    </motion.div>
-
-                    <motion.p
-                        variants={itemVariants}
-                        className="text-xl text-muted-foreground mb-8 max-w-lg leading-relaxed font-medium"
-                    >
-                        Experience the next generation of audio precision with the all-new AirPods Pro. Enhanced bass, active noise cancellation, and all-day comfort.
-                    </motion.p>
-
-                    <motion.div variants={itemVariants} className="flex gap-4">
-                        <button className="btn-primary group">
-                            Pre-order Now
-                            <span className="inline-block transform group-hover:translate-x-1 transition-transform ml-2">→</span>
-                        </button>
-                        <button className="bg-background-alt/50 backdrop-blur-md py-4 px-10 rounded-full text-foreground border border-border hover:bg-background-alt transition-all font-bold">
-                            View Specs
-                        </button>
-                    </motion.div>
-
+            <div className={`container-custom relative z-10 ${isMobile ? 'px-5' : ''}`}>
+                <div className={`grid ${isMobile ? 'grid-cols-1 text-center' : 'grid-cols-1 lg:grid-cols-2 gap-12'} items-center`}>
                     <motion.div
-                        variants={itemVariants}
-                        className="mt-12 flex items-center gap-6"
+                        initial="hidden"
+                        animate="visible"
+                        variants={containerVariants}
+                        className={`${isMobile ? 'text-center' : 'text-left'} pointer-events-auto`}
                     >
-                        <div className="flex -space-x-3">
-                            {[1, 2, 3, 4].map(i => (
-                                <div key={i} className="w-10 h-10 rounded-full border-2 border-background bg-secondary flex items-center justify-center text-[10px] text-foreground overflow-hidden shadow-sm">
-                                    <img src={`https://i.pravatar.cc/150?u=${i}`} alt="user" />
-                                </div>
-                            ))}
-                        </div>
-                        <p className="text-sm text-muted-foreground font-medium">
-                            Trusted by <span className="text-foreground font-bold italic tracking-tight">10k+</span> enthusiasts
-                        </p>
-                    </motion.div>
-                </motion.div>
+                        <motion.div variants={headlineVariants} className="overflow-hidden">
+                            <h1 className={`leading-none mb-6 text-foreground tracking-tighter ${isMobile ? 'text-5xl' : 'text-hero'}`}>
+                                Future of <br />
+                                <span className="text-gradient">Pure Sound.</span>
+                            </h1>
+                        </motion.div>
 
-                {/* Right side area - Show image on mobile since 3D is hidden */}
-                <div className="relative flex justify-center items-center h-[300px] md:h-[500px]">
-                    {isMobile && (
-                        <motion.img
-                            initial={{ opacity: 0, scale: 0.8, y: 20 }}
-                            animate={{ opacity: 1, scale: 1, y: 0 }}
-                            transition={{ duration: 0.8, delay: 0.5 }}
-                            src={heroAirpods}
-                            alt="Premium Audio"
-                            className="w-full max-w-[280px] h-auto object-contain drop-shadow-2xl"
-                        />
+                        <motion.p
+                            variants={itemVariants}
+                            className={`text-muted-foreground mb-8 leading-relaxed font-medium ${isMobile ? 'text-base px-2 max-w-sm mx-auto' : 'text-xl max-w-lg'}`}
+                        >
+                            Experience the next generation of audio precision with the all-new AirPods Pro. Enhanced bass, active noise cancellation, and all-day comfort.
+                        </motion.p>
+
+                        {/* Buttons - Stack vertically on mobile with touch-friendly sizing */}
+                        <motion.div
+                            variants={itemVariants}
+                            className={`flex ${isMobile ? 'flex-col items-center gap-4 w-full px-4' : 'flex-row gap-4'}`}
+                        >
+                            <button className={`btn-primary group ${isMobile ? 'w-full max-w-xs min-h-[52px] py-4 px-8 text-base' : ''}`}>
+                                Pre-order Now
+                                <span className="inline-block transform group-hover:translate-x-1 transition-transform ml-2">→</span>
+                            </button>
+                            <button className={`bg-background-alt/50 backdrop-blur-md rounded-full text-foreground border border-border hover:bg-background-alt transition-all font-bold ${isMobile ? 'w-full max-w-xs min-h-[52px] py-4 px-8 text-base' : 'py-4 px-10'}`}>
+                                View Specs
+                            </button>
+                        </motion.div>
+
+                        {/* Trust indicators - Adjust for mobile */}
+                        <motion.div
+                            variants={itemVariants}
+                            className={`mt-10 flex items-center gap-4 ${isMobile ? 'justify-center' : ''}`}
+                        >
+                            <div className="flex -space-x-3">
+                                {[1, 2, 3, 4].map(i => (
+                                    <div key={i} className={`rounded-full border-2 border-background bg-secondary flex items-center justify-center text-[10px] text-foreground overflow-hidden shadow-sm ${isMobile ? 'w-8 h-8' : 'w-10 h-10'}`}>
+                                        <img src={`https://i.pravatar.cc/150?u=${i}`} alt="user" className="w-full h-full object-cover" />
+                                    </div>
+                                ))}
+                            </div>
+                            <p className={`text-muted-foreground font-medium ${isMobile ? 'text-xs' : 'text-sm'}`}>
+                                Trusted by <span className="text-foreground font-bold italic tracking-tight">10k+</span> enthusiasts
+                            </p>
+                        </motion.div>
+                    </motion.div>
+
+                    {/* Right side area - Empty on mobile since particles are the focus */}
+                    {!isMobile && (
+                        <div className="relative flex justify-center items-center h-[500px]">
+                            {/* Desktop: 3D model renders in background layer */}
+                        </div>
                     )}
                 </div>
             </div>
 
-
-            {/* Scroll Indicator */}
-            <motion.div
-                animate={{ y: [0, 10, 0] }}
-                transition={{ duration: 2, repeat: Infinity }}
-                className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2"
-            >
-                <div className="w-[1.5px] h-14 bg-gradient-to-b from-primary via-primary/50 to-transparent rounded-full" />
-                <span className="text-[9px] text-muted-foreground uppercase tracking-[0.4em] font-black">Explore</span>
-            </motion.div>
+            {/* Scroll Indicator - Hidden on mobile for cleaner look */}
+            {!isMobile && (
+                <motion.div
+                    animate={{ y: [0, 10, 0] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                    className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2"
+                >
+                    <div className="w-[1.5px] h-14 bg-gradient-to-b from-primary via-primary/50 to-transparent rounded-full" />
+                    <span className="text-[9px] text-muted-foreground uppercase tracking-[0.4em] font-black">Explore</span>
+                </motion.div>
+            )}
         </section>
     );
 };
 
 export default Hero;
+

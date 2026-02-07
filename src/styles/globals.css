@@ -408,6 +408,19 @@ h4,
   .container-custom {
     padding: 0 1rem;
   }
+
+  /* Mobile Hero Button Styles - Touch-friendly sizing */
+  .btn-primary {
+    min-height: 48px;
+    min-width: 44px;
+    padding: 14px 28px;
+    font-size: 15px;
+  }
+
+  /* Ensure text readability over particles */
+  .hero-text-shadow {
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  }
 }
 
 /* Print Styles */
