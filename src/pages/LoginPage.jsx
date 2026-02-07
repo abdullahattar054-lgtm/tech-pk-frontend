@@ -107,12 +107,12 @@ const LoginPage = () => {
                         {loading ? 'Logging in...' : 'Login'}
                     </button>
 
-                    <div className="relative my-6">
+                    <div className="relative py-4">
                         <div className="absolute inset-0 flex items-center">
-                            <div className="w-full border-t border-gray-300 dark:border-gray-600"></div>
+                            <div className="w-full border-t border-border"></div>
                         </div>
-                        <div className="relative flex justify-center text-sm">
-                            <span className="px-4 bg-white dark:bg-card-dark text-gray-500 font-medium">Or continue with</span>
+                        <div className="relative flex justify-center text-sm uppercase tracking-wider">
+                            <span className="px-4 bg-background text-text-muted font-bold text-[10px]">Or continue with</span>
                         </div>
                     </div>
 
@@ -120,10 +120,10 @@ const LoginPage = () => {
                         <button
                             type="button"
                             onClick={() => loginWithGoogle()}
-                            className="w-full flex items-center justify-center gap-3 bg-white dark:bg-dark-bg border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200 font-semibold py-2.5 px-4 rounded-xl transition-all duration-200 shadow-sm"
+                            className="w-full flex items-center justify-center gap-3 bg-white/5 dark:bg-white/5 border border-border hover:bg-white/10 dark:hover:bg-white/10 text-text font-bold py-4 px-6 rounded-2xl transition-all duration-300 shadow-sm active:scale-[0.98]"
                         >
                             <FcGoogle size={24} />
-                            Sign in with Google
+                            <span className="tracking-tight">Sign in with Google</span>
                         </button>
                     </div>
                 </form>

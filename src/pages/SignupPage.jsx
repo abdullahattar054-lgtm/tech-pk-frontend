@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { register } from '../redux/slices/authSlice';
+import { register, googleLogin } from '../redux/slices/authSlice';
 import { toast } from 'react-toastify';
+import { useGoogleLogin } from '@react-oauth/google';
 import { Eye, EyeOff } from 'lucide-react';
+import { FcGoogle } from 'react-icons/fc';
 
 const SignupPage = () => {
     const [formData, setFormData] = useState({
@@ -18,6 +20,21 @@ const SignupPage = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { loading } = useSelector((state) => state.auth);
+
+    const loginWithGoogle = useGoogleLogin({
+        onSuccess: async (tokenResponse) => {
+            const result = await dispatch(googleLogin(tokenResponse.access_token));
+            if (!result.error) {
+                toast.success('Registration successful!');
+                navigate('/');
+            } else {
+                toast.error(result.payload || 'Google Login failed');
+            }
+        },
+        onError: () => {
+            toast.error('Google Sign In was unsuccessful. Try again later');
+        }
+    });
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -133,6 +150,26 @@ const SignupPage = () => {
                     <button type="submit" className="btn-primary w-full" disabled={loading}>
                         {loading ? 'Creating Account...' : 'Sign Up'}
                     </button>
+
+                    <div className="relative py-4">
+                        <div className="absolute inset-0 flex items-center">
+                            <div className="w-full border-t border-border"></div>
+                        </div>
+                        <div className="relative flex justify-center text-sm uppercase tracking-wider">
+                            <span className="px-4 bg-background text-text-muted font-bold text-[10px]">Or continue with</span>
+                        </div>
+                    </div>
+
+                    <div className="flex justify-center">
+                        <button
+                            type="button"
+                            onClick={() => loginWithGoogle()}
+                            className="w-full flex items-center justify-center gap-3 bg-white/5 dark:bg-white/5 border border-border hover:bg-white/10 dark:hover:bg-white/10 text-text font-bold py-4 px-6 rounded-2xl transition-all duration-300 shadow-sm active:scale-[0.98]"
+                        >
+                            <FcGoogle size={24} />
+                            <span className="tracking-tight">Sign up with Google</span>
+                        </button>
+                    </div>
                 </form>
                 <p className="text-center mt-6 text-gray-600 dark:text-gray-400">
                     Already have an account?{' '}
