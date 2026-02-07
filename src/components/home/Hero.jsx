@@ -10,6 +10,9 @@ const Hero = () => {
     const { width } = useWindowSize();
     const isMobile = width <= 768;
 
+    // Debug log to verify deployment
+    if (isMobile) console.log('Mobile Particles Hero v2.0 Loaded');
+
     const { rotateX, rotateY, onMouseMove, onMouseLeave } = useTilt(10);
 
     const headlineVariants = {
