@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { Filter, X } from 'lucide-react';
 import { fetchProducts, setFilters, clearFilters } from '../redux/slices/productSlice';
 import ProductCard from '../components/products/ProductCard';
 import Loader from '../components/common/Loader';
@@ -10,6 +11,7 @@ const ProductsPage = () => {
     const dispatch = useDispatch();
     const { products, loading, filters, pagination } = useSelector((state) => state.products);
     const [priceRange, setPriceRange] = useState(1000);
+    const [isFilterOpen, setIsFilterOpen] = useState(false);
 
     useEffect(() => {
         dispatch(fetchProducts(filters));
@@ -26,6 +28,7 @@ const ProductsPage = () => {
 
     const applyPriceFilter = () => {
         dispatch(setFilters({ maxPrice: priceRange }));
+        setIsFilterOpen(false); // Close on mobile after applying
     };
 
     return (
@@ -41,10 +44,35 @@ const ProductsPage = () => {
                     <p className="text-muted-foreground font-medium">Showing {products.length} premium items</p>
                 </div>
 
+                {/* Mobile Filter Toggle */}
+                <button
+                    onClick={() => setIsFilterOpen(true)}
+                    className="lg:hidden w-full mb-8 flex items-center justify-center gap-2 bg-background-alt border border-border p-4 rounded-2xl font-bold text-foreground hover:bg-primary/5 transition-colors shadow-sm"
+                >
+                    <Filter size={20} className="text-primary" />
+                    Filter Collection
+                </button>
+
                 <div className="grid grid-cols-1 lg:grid-cols-4 gap-12">
                     {/* Filters Sidebar */}
-                    <aside className="lg:col-span-1">
-                        <div className="bg-background-alt border border-border p-8 rounded-[2.5rem] sticky top-32">
+                    <aside className={`
+                        lg:col-span-1
+                        ${isFilterOpen ? 'fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm p-4' : 'hidden lg:block'}
+                    `}>
+                        {/* Mobile Overlay Click to Close */}
+                        <div className="absolute inset-0 lg:hidden" onClick={() => setIsFilterOpen(false)} />
+
+                        <div className={`
+                            bg-background-alt border border-border p-8 rounded-[2.5rem] 
+                            ${isFilterOpen ? 'relative w-full max-w-md max-h-[85vh] overflow-y-auto shadow-2xl animate-in slide-in-from-bottom-20 duration-300' : 'sticky top-32'}
+                        `}>
+                            {/* Mobile Close Button */}
+                            <button
+                                onClick={() => setIsFilterOpen(false)}
+                                className="lg:hidden absolute top-5 right-5 p-2 bg-background rounded-full hover:bg-primary/10 transition-colors z-10"
+                            >
+                                <X size={20} />
+                            </button>
                             <h2 className="text-foreground font-bold text-xl mb-8 flex items-center gap-3">
                                 <div className="p-2 bg-primary/10 rounded-lg">
                                     <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
