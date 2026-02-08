@@ -185,26 +185,7 @@ const AboutPage = () => {
                 </div>
             </section>
 
-            {/* Why Choose Us Section */}
-            <section className="py-32 section-padding relative overflow-hidden">
-                <div className="container-custom">
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-                        {[
-                            { title: "Authentic Products", icon: CheckCircle, desc: "Every item in our collection is 100% genuine and verified. We don't do fakes." },
-                            { title: "Competitive Pricing", icon: Zap, desc: "Premium technology shouldn't mean inflated prices. We offer the best deals in Pakistan." },
-                            { title: "Easy Returns", icon: Headset, desc: "Not happy with your purchase? Enjoy a 30-day hassle-free return policy." }
-                        ].map((item, i) => (
-                            <div key={i} className="text-center lg:text-left" data-aos="fade-up" data-aos-delay={i * 200}>
-                                <div className="w-16 h-16 bg-primary/10 rounded-3xl flex items-center justify-center mb-8 mx-auto lg:ml-0 text-primary">
-                                    <item.icon size={32} />
-                                </div>
-                                <h4 className="text-2xl font-bold mb-4">{item.title}</h4>
-                                <p className="text-muted-foreground leading-relaxed">{item.desc}</p>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </section>
+            {/* Values that Drive Us section ends above */}
 
             {/* CTA Section */}
             <section className="py-20 mb-32 px-4 relative z-10">
@@ -230,10 +211,5 @@ const AboutPage = () => {
         </div>
     );
 };
-
-// CheckCircle placeholder as it was missing from imports
-const CheckCircle = ({ size = 24 }) => (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" /></svg>
-);
 
 export default AboutPage;
