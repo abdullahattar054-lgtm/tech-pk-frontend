@@ -14,12 +14,12 @@ const Particles = ({
 
     // Memoize particle config for performance
     const config = useMemo(() => ({
-        // Mobile: slower, fewer particles, simpler rendering
-        particleSpeed: isMobile ? speed * 0.3 : speed * 0.5,
-        particleOpacity: isMobile ? opacity * 0.8 : opacity,
-        minSize: isMobile ? 1.5 : 1,
-        maxSize: isMobile ? 3 : 4,
-        glowEnabled: !isMobile, // Disable glow on mobile for performance
+        // Mobile: User requested "moving glowing particles"
+        particleSpeed: isMobile ? speed * 0.8 : speed * 0.5,
+        particleOpacity: isMobile ? opacity : opacity,
+        minSize: isMobile ? 2 : 1,
+        maxSize: isMobile ? 5 : 4,
+        glowEnabled: true, // Always enable glow (requested for mobile)
     }), [speed, opacity, isMobile]);
 
     const initParticles = useCallback((canvas) => {

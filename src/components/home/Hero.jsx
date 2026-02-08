@@ -11,7 +11,7 @@ const Hero = () => {
     const isMobile = width <= 768;
 
     // Debug log to verify deployment
-    if (isMobile) console.log('Mobile Particles Hero v2.0 Loaded');
+    if (isMobile) console.log('Mobile Particles Hero v3.0 (Glowing) Loaded');
 
     const { rotateX, rotateY, onMouseMove, onMouseLeave } = useTilt(10);
 
@@ -52,14 +52,17 @@ const Hero = () => {
             {!isMobile && <Hero3D />}
 
             {/* Layer 3: Particles - Enhanced for mobile with more particles */}
-            <Particles
-                color="#0066FF"
-                density={isMobile ? 70 : 40}
-                speed={isMobile ? 0.5 : 1}
-                opacity={isMobile ? 0.5 : 0.4}
-                isMobile={isMobile}
-                connectDistance={isMobile ? 0 : 100}
-            />
+            {/* Layer 3: Particles - Mobile ONLY (Moving & Glowing) */}
+            {isMobile && (
+                <Particles
+                    color="#0066FF"
+                    density={120}
+                    speed={1.5}
+                    opacity={0.8}
+                    isMobile={isMobile}
+                    connectDistance={0}
+                />
+            )}
 
             {/* Layer 4: Foreground Content */}
             <div className={`container-custom relative z-10 ${isMobile ? 'px-5 pt-20' : ''}`}>
