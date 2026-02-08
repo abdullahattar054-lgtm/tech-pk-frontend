@@ -1,6 +1,10 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Calendar, Clock, ArrowRight } from 'lucide-react';
+import blog1 from '../assets/blog/blog-1-earbuds.jpg';
+import blog2 from '../assets/blog/blog-2-watch.jpg';
+import blog3 from '../assets/blog/blog-3-headphones.jpg';
+import blog4 from '../assets/blog/blog-4-anc.jpg';
 
 const blogPosts = [
     {
@@ -10,7 +14,7 @@ const blogPosts = [
         category: 'Technology',
         date: 'Feb 3, 2025',
         readTime: '5 min read',
-        image: 'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=800&q=80'
+        image: blog1
     },
     {
         id: 2,
@@ -19,7 +23,7 @@ const blogPosts = [
         category: 'Guides',
         date: 'Jan 28, 2025',
         readTime: '8 min read',
-        image: 'https://images.unsplash.com/photo-1579586337278-3befd40fd17a?w=800&q=80'
+        image: blog2
     },
     {
         id: 3,
@@ -28,7 +32,7 @@ const blogPosts = [
         category: 'Comparison',
         date: 'Jan 20, 2025',
         readTime: '6 min read',
-        image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&q=80'
+        image: blog3
     },
     {
         id: 4,
@@ -37,7 +41,7 @@ const blogPosts = [
         category: 'Technology',
         date: 'Jan 15, 2025',
         readTime: '4 min read',
-        image: 'https://images.unsplash.com/photo-1484704849700-f032a568e944?w=800&q=80'
+        image: blog4
     }
 ];
 
