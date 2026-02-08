@@ -41,7 +41,12 @@ const Hero = () => {
     };
 
     return (
-        <section className="relative h-screen flex items-center justify-center overflow-hidden bg-background">
+        <section
+            onMouseMove={onMouseMove}
+            onMouseLeave={onMouseLeave}
+            onMouseEnter={onMouseEnter}
+            className="relative h-screen flex items-center justify-center overflow-hidden bg-background"
+        >
             {/* Layer 1: Background Mesh/Gradient */}
             <motion.div
                 style={{ y: backgroundY }}
@@ -49,23 +54,27 @@ const Hero = () => {
             />
 
             {/* Layer 2: 3D Scene Background - Only render on Desktop */}
-            {!isMobile && <Hero3D />}
+            {!isMobile && <Hero3D isMobile={isMobile} />}
 
-            {/* Layer 3: Particles - Enhanced for mobile with more particles */}
-            {/* Layer 3: Particles - Mobile ONLY (Moving & Glowing) */}
-            {isMobile && (
-                <Particles
-                    color="#0066FF"
-                    density={120}
-                    speed={1.5}
-                    opacity={0.8}
-                    isMobile={isMobile}
-                    connectDistance={0}
-                />
-            )}
+            {/* Layer 3: Particles - Enabled for both mobile and desktop now */}
+            <Particles
+                color="#0066FF"
+                density={isMobile ? 120 : 60}
+                speed={isMobile ? 1.5 : 0.8}
+                opacity={0.8}
+                isMobile={isMobile}
+                connectDistance={isMobile ? 0 : 150}
+            />
 
-            {/* Layer 4: Foreground Content */}
-            <div className={`container-custom relative z-10 ${isMobile ? 'px-5 pt-20' : ''}`}>
+            {/* Layer 4: Foreground Content with Tilt Effect */}
+            <motion.div
+                style={{
+                    rotateX: isMobile ? 0 : rotateX,
+                    rotateY: isMobile ? 0 : rotateY,
+                    perspective: 1000
+                }}
+                className={`container-custom relative z-10 ${isMobile ? 'px-5 pt-20' : ''}`}
+            >
                 <div className={`grid ${isMobile ? 'grid-cols-1 text-center' : 'grid-cols-1 lg:grid-cols-2 gap-12'} items-center`}>
                     <motion.div
                         initial="hidden"
@@ -119,14 +128,14 @@ const Hero = () => {
                         </motion.div>
                     </motion.div>
 
-                    {/* Right side area - Empty on mobile since particles are the focus */}
+                    {/* Right side area - Space for 3D model on desktop */}
                     {!isMobile && (
                         <div className="relative flex justify-center items-center h-[500px]">
                             {/* Desktop: 3D model renders in background layer */}
                         </div>
                     )}
                 </div>
-            </div>
+            </motion.div>
 
             {/* Scroll Indicator - Hidden on mobile for cleaner look */}
             {!isMobile && (
