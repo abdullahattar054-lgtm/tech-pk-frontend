@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { fetchProducts } from '../redux/slices/productSlice';
 import Hero from '../components/home/Hero';
 import ProductCard from '../components/products/ProductCard';
+import ProductCardSkeleton from '../components/products/ProductCardSkeleton';
 import Loader from '../components/common/Loader';
 import { useLoader } from '../hooks/useLoader';
 
@@ -24,7 +25,8 @@ const Home = () => {
         dispatch(fetchProducts({ limit: 4, featured: true }));
     }, [dispatch]);
 
-    const isLoading = isGlobalLoading || productsLoading;
+    const isLoading = isGlobalLoading;
+    const isProductsLoading = productsLoading;
 
     return (
         <div className="min-h-screen bg-background">
@@ -32,7 +34,7 @@ const Home = () => {
 
             <motion.div
                 initial={{ opacity: 0 }}
-                animate={{ opacity: isLoading ? 0 : 1 }}
+                animate={{ opacity: isGlobalLoading ? 0 : 1 }}
                 transition={{ duration: 1 }}
                 className="overflow-hidden"
             >
@@ -89,7 +91,11 @@ const Home = () => {
                                 }
                             }}
                         >
-                            {products && products.length > 0 ? (
+                            {productsLoading ? (
+                                [...Array(4)].map((_, i) => (
+                                    <ProductCardSkeleton key={i} />
+                                ))
+                            ) : products && products.length > 0 ? (
                                 products.map((product, index) => (
                                     <motion.div
                                         key={product._id}
@@ -103,7 +109,7 @@ const Home = () => {
                                     </motion.div>
                                 ))
                             ) : (
-                                !productsLoading && <p className="text-muted-foreground text-center col-span-full py-20 bg-background-alt rounded-[2rem]">No featured products found.</p>
+                                <p className="text-muted-foreground text-center col-span-full py-20 bg-background-alt rounded-[2.5rem]">No featured products found.</p>
                             )}
                         </motion.div>
                     </div>
