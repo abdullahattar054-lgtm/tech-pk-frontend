@@ -91,9 +91,7 @@ const Hero3D = ({ isMobile }) => {
                 <pointLight position={[-10, -10, -10]} intensity={0.5} />
 
                 <PresentationControls
-                    global
                     config={{ mass: 2, tension: 500 }}
-                    snap={{ mass: 4, tension: 1500 }}
                     rotation={[0, 0.3, 0]}
                     polar={[-Math.PI / 4, Math.PI / 4]}
                     azimuth={[-Math.PI / 4, Math.PI / 4]}
@@ -106,8 +104,6 @@ const Hero3D = ({ isMobile }) => {
                         <StylizedProduct isMobile={isMobile} />
                     </Float>
                 </PresentationControls>
-
-                <OrbitControls enableZoom={false} enablePan={false} enableRotate={!isMobile} />
             </Canvas>
         </div>
     );

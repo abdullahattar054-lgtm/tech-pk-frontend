@@ -73,7 +73,7 @@ const Hero = () => {
                     rotateY: isMobile ? 0 : rotateY,
                     perspective: 1000
                 }}
-                className={`container-custom relative z-10 ${isMobile ? 'px-5 pt-20' : ''}`}
+                className={`container-custom relative z-10 pointer-events-none ${isMobile ? 'px-5 pt-20' : ''}`}
             >
                 <div className={`grid ${isMobile ? 'grid-cols-1 text-center' : 'grid-cols-1 lg:grid-cols-2 gap-12'} items-center`}>
                     <motion.div
