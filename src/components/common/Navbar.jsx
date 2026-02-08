@@ -157,7 +157,7 @@ const Navbar = () => {
                                         key={item}
                                         to={item === 'Home' ? '/' : `/${item.toLowerCase()}`}
                                         onClick={() => setMobileMenuOpen(false)}
-                                        className="block py-3 text-lg font-bold text-foreground hover:text-primary transition-colors"
+                                        className="block py-4 text-lg font-bold text-foreground hover:text-primary transition-colors border-b border-border/10 last:border-0"
                                     >
                                         {item}
                                     </Link>
