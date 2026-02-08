@@ -13,7 +13,7 @@ const Hero = () => {
     // Debug log to verify deployment
     if (isMobile) console.log('Mobile Particles Hero v3.0 (Glowing) Loaded');
 
-    const { rotateX, rotateY, onMouseMove, onMouseLeave } = useTilt(10);
+    const { rotateX, rotateY, onMouseMove, onMouseLeave, onMouseEnter } = useTilt(10);
 
     const headlineVariants = {
         hidden: { x: -60, opacity: 0 },
