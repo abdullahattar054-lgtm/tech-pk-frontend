@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { Filter, X } from 'lucide-react';
 import { fetchProducts, setFilters, clearFilters } from '../redux/slices/productSlice';
 import ProductCard from '../components/products/ProductCard';
+import ProductCardSkeleton from '../components/products/ProductCardSkeleton';
 import Loader from '../components/common/Loader';
 
 const ProductsPage = () => {
@@ -154,7 +155,7 @@ const ProductsPage = () => {
                         {loading ? (
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                                 {[...Array(6)].map((_, i) => (
-                                    <div key={i} className="h-80 bg-white/5 rounded-[2rem] animate-pulse" />
+                                    <ProductCardSkeleton key={i} />
                                 ))}
                             </div>
                         ) : (

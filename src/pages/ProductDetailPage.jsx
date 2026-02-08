@@ -7,6 +7,7 @@ import { addItemToCart } from '../redux/slices/cartSlice';
 import { toggleWishlist, toggleWishlistAsync } from '../redux/slices/wishlistSlice';
 import { toast } from 'react-toastify';
 import Loader from '../components/common/Loader';
+import ProductDetailSkeleton from '../components/products/ProductDetailSkeleton';
 
 const ProductDetailPage = () => {
     const { id } = useParams();
@@ -89,12 +90,12 @@ const ProductDetailPage = () => {
     };
 
 
-    if (loading) return <div className="min-h-screen flex items-center justify-center bg-background"><Loader show={true} /></div>;
+    if (loading) return <ProductDetailSkeleton />;
     if (error) return <div className="min-h-screen flex flex-col items-center justify-center bg-background text-foreground p-4 text-center">
         <h2 className="text-3xl font-bold mb-4">Product Not Found</h2>
         <Link to="/products" className="btn-primary">Back to Collection</Link>
     </div>;
-    if (!product) return <div className="min-h-screen flex items-center justify-center bg-background"><Loader show={true} /></div>;
+    if (!product) return <ProductDetailSkeleton />;
 
     return (
         <motion.div
