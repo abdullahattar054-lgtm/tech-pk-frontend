@@ -59,7 +59,7 @@ const Hero = () => {
             {/* Layer 3: Particles - Enabled for both mobile and desktop now */}
             <Particles
                 color="#0066FF"
-                density={isMobile ? 120 : 60}
+                density={isMobile ? 40 : 60}
                 speed={isMobile ? 1.5 : 0.8}
                 opacity={0.8}
                 isMobile={isMobile}
