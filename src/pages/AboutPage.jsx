@@ -207,16 +207,21 @@ const AboutPage = () => {
             </section>
 
             {/* CTA Section */}
-            <section className="py-20 mb-20 px-4">
+            <section className="py-20 mb-32 px-4 relative z-10">
                 <div className="container-custom">
-                    <div className="glass rounded-[4rem] p-12 md:p-24 text-center relative overflow-hidden group" data-aos="zoom-in">
-                        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-secondary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                    <div className="glass rounded-[4rem] p-8 md:p-24 text-center relative overflow-hidden group" data-aos="zoom-in">
+                        <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
                         <div className="relative z-10">
-                            <h2 className="text-hero-custom mb-8">Ready to Experience <br /> <span className="text-gradient">Premium Tech?</span></h2>
-                            <p className="text-muted-foreground text-xl mb-12 max-w-xl mx-auto">Join thousands of happy customers and elevate your technology game today.</p>
-                            <div className="flex flex-col sm:flex-row gap-6 justify-center">
-                                <Link to="/products" className="btn-primary py-5 px-12 text-lg">Shop Now</Link>
-                                <Link to="/contact" className="btn-secondary py-5 px-12 text-lg">Contact Us</Link>
+                            <h2 className="text-4xl md:text-6xl font-black mb-8 tracking-tight">
+                                Ready to Experience <br className="hidden md:block" />
+                                <span className="bg-gradient-to-r from-sky-400 via-cyan-300 to-primary bg-clip-text text-transparent">Premium Tech?</span>
+                            </h2>
+                            <p className="text-muted-foreground text-lg md:text-xl mb-12 max-w-xl mx-auto leading-relaxed">
+                                Join thousands of happy customers and elevate your technology game today.
+                            </p>
+                            <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center w-full max-w-md mx-auto sm:max-w-none">
+                                <Link to="/products" className="btn-primary w-full sm:w-auto py-4 sm:py-5 px-12 text-lg flex items-center justify-center">Shop Now</Link>
+                                <Link to="/contact" className="btn-secondary w-full sm:w-auto py-4 sm:py-5 px-12 text-lg flex items-center justify-center">Contact Us</Link>
                             </div>
                         </div>
                     </div>
