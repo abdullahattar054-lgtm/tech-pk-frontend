@@ -1,4 +1,4 @@
-import { memo, useState } from 'react';
+import { memo, useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useDispatch } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
@@ -7,6 +7,9 @@ import { toast } from 'react-toastify';
 import { useTilt } from '../../hooks/useTilt';
 import { ShoppingCart, Eye } from 'lucide-react';
 import ShimmerImage from '../common/ShimmerImage';
+import Magnetic from '../animations/Magnetic';
+import SpringyTouch from '../animations/SpringyTouch';
+import { useFlyToCart } from '../../context/FlyToCartContext';
 
 const ProductCard = memo(({ product }) => {
     const { rotateX, rotateY, onMouseMove, onMouseLeave } = useTilt(12);
