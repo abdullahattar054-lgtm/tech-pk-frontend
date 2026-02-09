@@ -34,7 +34,7 @@ const Home = () => {
 
             <motion.div
                 initial={{ opacity: 0 }}
-                animate={{ opacity: isGlobalLoading ? 0 : 1 }}
+                animate={{ opacity: 1 }}
                 transition={{ duration: 1 }}
                 className="overflow-hidden"
             >

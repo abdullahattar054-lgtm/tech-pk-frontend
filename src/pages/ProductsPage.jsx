@@ -64,7 +64,7 @@ const ProductsPage = () => {
                         <div className="absolute inset-0 lg:hidden" onClick={() => setIsFilterOpen(false)} />
 
                         <div className={`
-                            bg-background-alt border border-border p-8 rounded-[2.5rem] 
+                            glass p-8 rounded-[2.5rem] 
                             ${isFilterOpen ? 'relative w-full max-w-md max-h-[85vh] overflow-y-auto shadow-2xl animate-in slide-in-from-bottom-20 duration-300' : 'sticky top-32'}
                         `}>
                             {/* Mobile Close Button */}

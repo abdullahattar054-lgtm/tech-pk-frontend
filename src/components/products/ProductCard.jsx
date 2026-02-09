@@ -6,6 +6,10 @@ import { addItemToCart } from '../../redux/slices/cartSlice';
 import { toast } from 'react-toastify';
 import { useTilt } from '../../hooks/useTilt';
 import { ShoppingCart, Eye } from 'lucide-react';
+import Magnetic from '../animations/Magnetic';
+import SpringyTouch from '../animations/SpringyTouch';
+import { useFlyToCart } from '../../context/FlyToCartContext';
+import { useRef } from 'react';
 
 const ProductCard = memo(({ product }) => {
     const { rotateX, rotateY, onMouseMove, onMouseLeave } = useTilt(12);
@@ -13,6 +17,8 @@ const ProductCard = memo(({ product }) => {
     const navigate = useNavigate();
     const [selectedColor, setSelectedColor] = useState(product.colors?.[0]?.name || '');
     const [hoveredColor, setHoveredColor] = useState(null);
+    const { fly } = useFlyToCart();
+    const imgRef = useRef(null);
 
     const activeColor = hoveredColor || selectedColor;
     const currentVariant = product.colors?.find(c => c.name === activeColor) || product.colors?.[0];
@@ -21,6 +27,12 @@ const ProductCard = memo(({ product }) => {
     const handleAddToCart = (e) => {
         e.preventDefault();
         e.stopPropagation();
+
+        // Start Fly Animation
+        if (imgRef.current) {
+            const rect = imgRef.current.getBoundingClientRect();
+            fly({ x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 }, displayImage || fallbackImage);
+        }
 
         dispatch(addItemToCart({
             productId: product._id,
@@ -67,6 +79,7 @@ const ProductCard = memo(({ product }) => {
                         <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
 
                         <img
+                            ref={imgRef}
                             src={displayImage || fallbackImage}
                             alt={product.name}
                             loading="lazy"
@@ -79,24 +92,32 @@ const ProductCard = memo(({ product }) => {
                         />
 
                         {/* Action Overlays */}
-                        <div className="absolute inset-x-4 bottom-4 translate-y-[120%] group-hover:translate-y-0 transition-transform duration-500 ease-out z-30 flex gap-2">
-                            <button
-                                onClick={handleAddToCart}
-                                disabled={product.stock === 0}
-                                className="flex-1 h-12 bg-primary text-white rounded-xl flex items-center justify-center gap-2 hover:bg-primary/90 transition-colors shadow-lg active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
-                            >
-                                <ShoppingCart size={18} />
-                                <span className="font-bold text-sm">Add</span>
-                            </button>
-                            <button
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    navigate(`/product/${product._id}`);
-                                }}
-                                className="w-12 h-12 bg-background/80 backdrop-blur-md border border-border text-foreground rounded-xl flex items-center justify-center hover:bg-background transition-colors active:scale-95 hover:text-primary"
-                            >
-                                <Eye size={18} />
-                            </button>
+                        <div className="absolute inset-x-4 bottom-4 translate-y-[120%] group-hover:translate-y-0 transition-transform duration-500 ease-out z-30 flex gap-2 items-center">
+                            <Magnetic strength={0.3} className="flex-1">
+                                <SpringyTouch className="w-full">
+                                    <button
+                                        onClick={handleAddToCart}
+                                        disabled={product.stock === 0}
+                                        className="w-full h-12 bg-primary text-white rounded-xl flex items-center justify-center gap-2.5 hover:bg-primary/90 transition-all shadow-lg active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed group/btn"
+                                    >
+                                        <ShoppingCart size={16} className="transition-transform group-hover/btn:-rotate-12" />
+                                        <span className="font-black text-[11px] uppercase tracking-wider">Add</span>
+                                    </button>
+                                </SpringyTouch>
+                            </Magnetic>
+                            <Magnetic strength={0.2} className="flex-shrink-0">
+                                <SpringyTouch>
+                                    <button
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            navigate(`/product/${product._id}`);
+                                        }}
+                                        className="w-12 h-12 bg-background/80 backdrop-blur-md border border-border text-foreground rounded-xl flex items-center justify-center hover:bg-background transition-colors active:scale-95 hover:text-primary shadow-lg"
+                                    >
+                                        <Eye size={18} />
+                                    </button>
+                                </SpringyTouch>
+                            </Magnetic>
                         </div>
                     </div>
 
@@ -114,23 +135,24 @@ const ProductCard = memo(({ product }) => {
                         {product.colors && product.colors.length > 1 && (
                             <div className="flex gap-2 mb-4" onClick={(e) => e.preventDefault()}>
                                 {product.colors.map((color) => (
-                                    <button
-                                        key={color.name}
-                                        onMouseEnter={() => setHoveredColor(color.name)}
-                                        onMouseLeave={() => setHoveredColor(null)}
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            e.stopPropagation();
-                                            setSelectedColor(color.name);
-                                        }}
-                                        className={`w-6 h-6 rounded-full border-2 transition-all duration-300 ${selectedColor === color.name ? 'border-primary scale-110 shadow-glow' : 'border-transparent hover:scale-110'}`}
-                                        title={color.name}
-                                    >
-                                        <div
-                                            className="w-full h-full rounded-full border border-white/10"
-                                            style={{ backgroundColor: color.value }}
-                                        />
-                                    </button>
+                                    <SpringyTouch key={color.name}>
+                                        <button
+                                            onMouseEnter={() => setHoveredColor(color.name)}
+                                            onMouseLeave={() => setHoveredColor(null)}
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                e.stopPropagation();
+                                                setSelectedColor(color.name);
+                                            }}
+                                            className={`w-6 h-6 rounded-full border-2 transition-all duration-300 ${selectedColor === color.name ? 'border-primary scale-110 shadow-glow' : 'border-transparent hover:scale-110'}`}
+                                            title={color.name}
+                                        >
+                                            <div
+                                                className="w-full h-full rounded-full border border-white/10"
+                                                style={{ backgroundColor: color.value }}
+                                            />
+                                        </button>
+                                    </SpringyTouch>
                                 ))}
                             </div>
                         )}

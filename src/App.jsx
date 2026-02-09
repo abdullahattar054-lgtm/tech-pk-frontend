@@ -30,6 +30,9 @@ import ScrollToTop from './components/common/ScrollToTop';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 
+// Providers
+import { FlyToCartProvider } from './context/FlyToCartContext';
+
 function App() {
     const dispatch = useDispatch();
     const location = useLocation();
@@ -64,41 +67,44 @@ function App() {
     }, [location.pathname]);
 
     return (
-        <div className="min-h-screen flex flex-col bg-background text-foreground selection:bg-primary/30 transition-colors duration-300">
-            <Navbar />
-            <main className="flex-grow pt-20 overflow-hidden">
-                <AnimatePresence mode="wait">
-                    <motion.div
-                        key={location.pathname}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.2, ease: 'easeOut' }}
-                    >
-                        <Routes location={location} key={location.pathname}>
-                            <Route path="/" element={<Home />} />
-                            <Route path="/products" element={<ProductsPage />} />
-                            <Route path="/product/:id" element={<ProductDetailPage />} />
-                            <Route path="/cart" element={<CartPage />} />
-                            <Route path="/checkout" element={<CheckoutPage />} />
-                            <Route path="/wishlist" element={<WishlistPage />} />
-                            <Route path="/login" element={<LoginPage />} />
-                            <Route path="/signup" element={<SignupPage />} />
-                            <Route path="/orders" element={<OrdersPage />} />
-                            <Route path="/profile/*" element={<ProfilePage />} />
-                            <Route path="/admin/*" element={<AdminPanel />} />
-                            <Route path="/about" element={<AboutPage />} />
-                            <Route path="/contact" element={<ContactPage />} />
-                            <Route path="/blog" element={<BlogPage />} />
-                            <Route path="*" element={<NotFoundPage />} />
-                        </Routes>
-                    </motion.div>
-                </AnimatePresence>
-            </main>
-            <SpeedInsights />
-            <Footer />
-            <ScrollToTop />
-        </div>
+        <FlyToCartProvider>
+            <div className="min-h-screen flex flex-col bg-background text-foreground selection:bg-primary/30 transition-colors duration-300">
+                <div className="ui-noise" />
+                <Navbar />
+                <main className="flex-grow pt-20 overflow-hidden">
+                    <AnimatePresence mode="wait">
+                        <motion.div
+                            key={location.pathname}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.2, ease: 'easeOut' }}
+                        >
+                            <Routes location={location} key={location.pathname}>
+                                <Route path="/" element={<Home />} />
+                                <Route path="/products" element={<ProductsPage />} />
+                                <Route path="/product/:id" element={<ProductDetailPage />} />
+                                <Route path="/cart" element={<CartPage />} />
+                                <Route path="/checkout" element={<CheckoutPage />} />
+                                <Route path="/wishlist" element={<WishlistPage />} />
+                                <Route path="/login" element={<LoginPage />} />
+                                <Route path="/signup" element={<SignupPage />} />
+                                <Route path="/orders" element={<OrdersPage />} />
+                                <Route path="/profile/*" element={<ProfilePage />} />
+                                <Route path="/admin/*" element={<AdminPanel />} />
+                                <Route path="/about" element={<AboutPage />} />
+                                <Route path="/contact" element={<ContactPage />} />
+                                <Route path="/blog" element={<BlogPage />} />
+                                <Route path="*" element={<NotFoundPage />} />
+                            </Routes>
+                        </motion.div>
+                    </AnimatePresence>
+                </main>
+                <SpeedInsights />
+                <Footer />
+                <ScrollToTop />
+            </div>
+        </FlyToCartProvider>
     );
 }
 

@@ -8,6 +8,10 @@ import { toggleWishlist, toggleWishlistAsync } from '../redux/slices/wishlistSli
 import { toast } from 'react-toastify';
 import Loader from '../components/common/Loader';
 import ProductDetailSkeleton from '../components/products/ProductDetailSkeleton';
+import Magnetic from '../components/animations/Magnetic';
+import SpringyTouch from '../components/animations/SpringyTouch';
+import { useFlyToCart } from '../context/FlyToCartContext';
+import { useRef } from 'react';
 
 const ProductDetailPage = () => {
     const { id } = useParams();
@@ -18,6 +22,8 @@ const ProductDetailPage = () => {
     const [quantity, setQuantity] = useState(1);
     const [selectedColor, setSelectedColor] = useState('');
     const [mainImage, setMainImage] = useState('');
+    const { fly } = useFlyToCart();
+    const imgRef = useRef(null);
 
     const isWishlisted = wishlistItems.some(item => item._id === product?._id);
 
@@ -51,6 +57,12 @@ const ProductDetailPage = () => {
     const colorImages = currentVariant?.images || product?.images || [];
 
     const handleAddToCart = () => {
+        // Start Fly Animation
+        if (imgRef.current) {
+            const rect = imgRef.current.getBoundingClientRect();
+            fly({ x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 }, mainImage);
+        }
+
         dispatch(addItemToCart({
             productId: product._id,
             quantity,
@@ -112,6 +124,7 @@ const ProductDetailPage = () => {
                         >
                             <AnimatePresence mode="wait">
                                 <motion.img
+                                    ref={imgRef}
                                     key={mainImage}
                                     initial={{ opacity: 0, scale: 0.95, filter: 'blur(10px)' }}
                                     animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
@@ -177,21 +190,22 @@ const ProductDetailPage = () => {
                                     <label className="block text-muted-foreground font-bold uppercase tracking-wider text-[10px] mb-6">Select <span className="text-primary">Finish</span> — {selectedColor}</label>
                                     <div className="flex flex-wrap gap-5">
                                         {product.colors?.map((color) => (
-                                            <button
-                                                key={color.name}
-                                                onClick={() => setSelectedColor(color.name)}
-                                                className={`relative group p-1 rounded-full border-2 transition-all duration-300 ${selectedColor === color.name ? 'border-primary scale-110 shadow-glow' : 'border-transparent hover:scale-110 hover:border-primary/30'}`}
-                                            >
-                                                <div
-                                                    className="w-12 h-12 rounded-full border-2 border-white/10 shadow-inner flex items-center justify-center overflow-hidden"
-                                                    style={{ backgroundColor: color.value }}
+                                            <SpringyTouch key={color.name}>
+                                                <button
+                                                    onClick={() => setSelectedColor(color.name)}
+                                                    className={`relative group p-1 rounded-full border-2 transition-all duration-300 ${selectedColor === color.name ? 'border-primary scale-110 shadow-glow' : 'border-transparent hover:scale-110 hover:border-primary/30'}`}
                                                 >
-                                                    <div className="absolute inset-0 bg-gradient-to-tr from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                                                </div>
-                                                <span className="absolute -top-10 left-1/2 -translate-x-1/2 px-3 py-1 bg-background-alt border border-border rounded-lg text-[10px] font-black uppercase tracking-widest opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all pointer-events-none whitespace-nowrap z-30">
-                                                    {color.name}
-                                                </span>
-                                            </button>
+                                                    <div
+                                                        className="w-12 h-12 rounded-full border-2 border-white/10 shadow-inner flex items-center justify-center overflow-hidden"
+                                                        style={{ backgroundColor: color.value }}
+                                                    >
+                                                        <div className="absolute inset-0 bg-gradient-to-tr from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                                                    </div>
+                                                    <span className="absolute -top-10 left-1/2 -translate-x-1/2 px-3 py-1 bg-background-alt border border-border rounded-lg text-[10px] font-black uppercase tracking-widest opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all pointer-events-none whitespace-nowrap z-30">
+                                                        {color.name}
+                                                    </span>
+                                                </button>
+                                            </SpringyTouch>
                                         ))}
                                     </div>
                                 </div>
@@ -200,19 +214,23 @@ const ProductDetailPage = () => {
                                     <label className="block text-muted-foreground font-bold uppercase tracking-wider text-xs mb-4">Quantity</label>
                                     <div className="flex items-center gap-6">
                                         <div className="flex items-center bg-background-alt rounded-xl border border-border p-1">
-                                            <button
-                                                onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                                                className="w-10 h-10 flex items-center justify-center text-foreground hover:bg-primary/10 rounded-lg transition-colors"
-                                            >
-                                                -
-                                            </button>
+                                            <SpringyTouch>
+                                                <button
+                                                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                                                    className="w-10 h-10 flex items-center justify-center text-foreground hover:bg-primary/10 rounded-lg transition-colors"
+                                                >
+                                                    -
+                                                </button>
+                                            </SpringyTouch>
                                             <span className="w-12 text-center text-xl font-bold text-foreground">{quantity}</span>
-                                            <button
-                                                onClick={() => setQuantity(quantity + 1)}
-                                                className="w-10 h-10 flex items-center justify-center text-foreground hover:bg-primary/10 rounded-lg transition-colors"
-                                            >
-                                                +
-                                            </button>
+                                            <SpringyTouch>
+                                                <button
+                                                    onClick={() => setQuantity(quantity + 1)}
+                                                    className="w-10 h-10 flex items-center justify-center text-foreground hover:bg-primary/10 rounded-lg transition-colors"
+                                                >
+                                                    +
+                                                </button>
+                                            </SpringyTouch>
                                         </div>
                                         <span className={`text-sm font-bold ${product.stock > 0 ? 'text-success' : 'text-error'}`}>
                                             {product.stock > 0 ? `${product.stock} items in stock` : 'Out of stock'}
@@ -221,23 +239,31 @@ const ProductDetailPage = () => {
                                 </div>
                             </div>
 
-                            <div className="flex gap-4">
-                                <button
-                                    onClick={handleAddToCart}
-                                    disabled={product.stock === 0}
-                                    className="btn-primary flex-1 py-5 rounded-2xl disabled:opacity-50 disabled:cursor-not-allowed group"
-                                >
-                                    Add to Cart
-                                    <span className="inline-block transform group-hover:translate-x-1 transition-transform ml-2">→</span>
-                                </button>
-                                <button
-                                    onClick={handleToggleWishlist}
-                                    className={`p-5 border rounded-2xl transition-all ${isWishlisted ? 'bg-primary/10 border-primary text-primary shadow-glow' : 'bg-background-alt border-border text-foreground hover:bg-secondary'}`}
-                                >
-                                    <svg className={`w-6 h-6 ${isWishlisted ? 'fill-primary' : 'fill-none'}`} stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                                    </svg>
-                                </button>
+                            <div className="flex gap-4 items-center">
+                                <Magnetic strength={0.2} className="flex-1">
+                                    <SpringyTouch>
+                                        <button
+                                            onClick={handleAddToCart}
+                                            disabled={product.stock === 0}
+                                            className="btn-primary w-full py-5 rounded-2xl disabled:opacity-50 disabled:cursor-not-allowed group flex items-center justify-center gap-3"
+                                        >
+                                            <span className="font-black uppercase tracking-wider">Add to Cart</span>
+                                            <span className="inline-block transform group-hover:translate-x-1 transition-transform">→</span>
+                                        </button>
+                                    </SpringyTouch>
+                                </Magnetic>
+                                <Magnetic strength={0.3}>
+                                    <SpringyTouch>
+                                        <button
+                                            onClick={handleToggleWishlist}
+                                            className={`p-5 border rounded-2xl transition-all ${isWishlisted ? 'bg-primary/10 border-primary text-primary shadow-glow' : 'bg-background-alt border-border text-foreground hover:bg-secondary'}`}
+                                        >
+                                            <svg className={`w-6 h-6 ${isWishlisted ? 'fill-primary' : 'fill-none'}`} stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                            </svg>
+                                        </button>
+                                    </SpringyTouch>
+                                </Magnetic>
                             </div>
 
                         </motion.div>

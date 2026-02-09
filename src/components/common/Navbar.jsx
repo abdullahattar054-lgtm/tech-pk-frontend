@@ -3,15 +3,32 @@ import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { toggleTheme } from '../../redux/slices/themeSlice';
 import { logout } from '../../redux/slices/authSlice';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion';
+import { useFlyToCart } from '../../context/FlyToCartContext';
+import SpringyTouch from '../animations/SpringyTouch';
 
 const Navbar = () => {
     const dispatch = useDispatch();
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [isVisible, setIsVisible] = useState(true);
+    const [lastScrollY, setLastScrollY] = useState(0);
+    const { scrollY } = useScroll();
+
+    useMotionValueEvent(scrollY, "change", (latest) => {
+        const direction = latest > lastScrollY ? "down" : "up";
+        if (direction === "down" && latest > 150 && !mobileMenuOpen) {
+            setIsVisible(false);
+        } else if (direction === "up") {
+            setIsVisible(true);
+        }
+        setLastScrollY(latest);
+    });
+
     const { isAuthenticated, user } = useSelector((state) => state.auth);
     const { items } = useSelector((state) => state.cart);
     const wishlistItems = useSelector((state) => state.wishlist.items);
     const { mode } = useSelector((state) => state.theme);
+    const { cartIconRef } = useFlyToCart();
 
 
     const handleLogout = () => {
@@ -20,9 +37,10 @@ const Navbar = () => {
 
     return (
         <motion.nav
-            initial={{ y: -100 }}
-            animate={{ y: 0 }}
-            className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border transition-colors duration-300"
+            initial={{ y: 0 }}
+            animate={{ y: isVisible ? 0 : -100 }}
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
+            className="fixed top-0 left-0 right-0 z-50 glass transition-colors duration-300"
         >
             <div className="container-custom">
                 <div className="flex items-center justify-between h-20">
@@ -97,6 +115,7 @@ const Navbar = () => {
                         {/* Cart */}
                         <Link
                             to="/cart"
+                            ref={cartIconRef}
                             className="relative p-2.5 rounded-xl bg-secondary border border-border text-muted-foreground hover:text-foreground hover:bg-secondary/80 transition-all"
                         >
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -126,19 +145,21 @@ const Navbar = () => {
                         )}
 
                         {/* Mobile Menu Button */}
-                        <button
-                            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                            className="md:hidden p-2.5 rounded-xl bg-secondary border border-border text-muted-foreground"
-                            aria-label="Toggle mobile menu"
-                        >
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                {mobileMenuOpen ? (
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                                ) : (
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
-                                )}
-                            </svg>
-                        </button>
+                        <SpringyTouch>
+                            <button
+                                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                                className="md:hidden p-2.5 rounded-xl bg-secondary border border-border text-muted-foreground"
+                                aria-label="Toggle mobile menu"
+                            >
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    {mobileMenuOpen ? (
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                                    ) : (
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+                                    )}
+                                </svg>
+                            </button>
+                        </SpringyTouch>
                     </div>
                 </div>
 
@@ -149,7 +170,7 @@ const Navbar = () => {
                             initial={{ opacity: 0, height: 0 }}
                             animate={{ opacity: 1, height: 'auto' }}
                             exit={{ opacity: 0, height: 0 }}
-                            className="md:hidden border-t border-border bg-background/95 backdrop-blur-xl"
+                            className="md:hidden border-t border-border glass"
                         >
                             <div className="px-4 py-6 space-y-4">
                                 {['Home', 'Products', 'About', 'Contact', 'Blog'].map((item) => (
