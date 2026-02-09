@@ -6,10 +6,7 @@ import { addItemToCart } from '../../redux/slices/cartSlice';
 import { toast } from 'react-toastify';
 import { useTilt } from '../../hooks/useTilt';
 import { ShoppingCart, Eye } from 'lucide-react';
-import Magnetic from '../animations/Magnetic';
-import SpringyTouch from '../animations/SpringyTouch';
-import { useFlyToCart } from '../../context/FlyToCartContext';
-import { useRef } from 'react';
+import ShimmerImage from '../common/ShimmerImage';
 
 const ProductCard = memo(({ product }) => {
     const { rotateX, rotateY, onMouseMove, onMouseLeave } = useTilt(12);
@@ -23,6 +20,9 @@ const ProductCard = memo(({ product }) => {
     const activeColor = hoveredColor || selectedColor;
     const currentVariant = product.colors?.find(c => c.name === activeColor) || product.colors?.[0];
     const displayImage = currentVariant?.images?.[0] || product.images?.[0];
+
+    // Fallback image in case the main one fails
+    const fallbackImage = 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800';
 
     const handleAddToCart = (e) => {
         e.preventDefault();
@@ -46,9 +46,6 @@ const ProductCard = memo(({ product }) => {
             }
         });
     };
-
-    // Fallback image in case the main one fails
-    const fallbackImage = 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800';
 
     return (
         <motion.div
@@ -78,18 +75,15 @@ const ProductCard = memo(({ product }) => {
                     <div className="relative aspect-[4/5] p-8 flex items-center justify-center overflow-hidden bg-gradient-to-b from-transparent to-black/5 dark:to-white/5">
                         <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
 
-                        <img
+                        <ShimmerImage
                             ref={imgRef}
-                            src={displayImage || fallbackImage}
+                            src={displayImage}
                             alt={product.name}
-                            loading="lazy"
-                            className="w-full h-full object-contain mb-4 transition-all duration-500 ease-out group-hover:scale-110 drop-shadow-2xl"
+                            className="drop-shadow-2xl group-hover:scale-110"
                             style={{ transform: 'translateZ(30px)' }}
-                            onError={(e) => {
-                                e.target.onerror = null; // Prevent infinite loop
-                                e.target.src = fallbackImage;
-                            }}
                         />
+
+                        {/* Action Overlays */}
 
                         {/* Action Overlays */}
                         <div className="absolute inset-x-4 bottom-4 translate-y-[120%] group-hover:translate-y-0 transition-transform duration-500 ease-out z-30 flex gap-2 items-center">

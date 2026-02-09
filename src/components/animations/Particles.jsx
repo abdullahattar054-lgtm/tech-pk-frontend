@@ -106,12 +106,8 @@ const Particles = ({
                 const pulse = Math.sin(time * p.pulseSpeed * 60 + p.pulseOffset);
                 const currentSize = p.size + pulse * 0.3;
 
-                // Optimization: Only use shadowBlur on mobile if requested, and only once per frame if possible
-                // But for now, we minimize its impact by only applying it when necessary
-                if (config.glowEnabled) {
-                    ctx.shadowBlur = 10;
-                    ctx.shadowColor = color;
-                }
+                // Optimization: shadowBlur is too expensive for mobile and high-density screens.
+                // We keep it disabled to maintain a high FPS and low TBT.
 
                 ctx.beginPath();
                 ctx.arc(p.x, p.y, Math.max(currentSize, 0.5), 0, Math.PI * 2);
@@ -119,9 +115,6 @@ const Particles = ({
                 ctx.globalAlpha = config.particleOpacity * (0.6 + pulse * 0.2);
                 ctx.fill();
 
-                if (config.glowEnabled) {
-                    ctx.shadowBlur = 0;
-                }
 
                 // Connection lines
                 if (connectDistance > 0 && !isMobile) {

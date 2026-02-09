@@ -12,6 +12,7 @@ import Magnetic from '../components/animations/Magnetic';
 import SpringyTouch from '../components/animations/SpringyTouch';
 import { useFlyToCart } from '../context/FlyToCartContext';
 import { useRef } from 'react';
+import ShimmerImage from '../components/common/ShimmerImage';
 
 const ProductDetailPage = () => {
     const { id } = useParams();
@@ -123,17 +124,14 @@ const ProductDetailPage = () => {
                             className="aspect-square bg-background-alt border border-border rounded-[2.5rem] overflow-hidden flex items-center justify-center p-8 group relative"
                         >
                             <AnimatePresence mode="wait">
-                                <motion.img
+                                <ShimmerImage
                                     ref={imgRef}
                                     key={mainImage}
-                                    initial={{ opacity: 0, scale: 0.95, filter: 'blur(10px)' }}
-                                    animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-                                    exit={{ opacity: 0, scale: 1.05, filter: 'blur(10px)' }}
-                                    transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
                                     src={mainImage}
                                     alt={product.name}
-                                    loading="eager"
-                                    className="w-full h-full object-contain z-10 p-4"
+                                    containerClassName="z-10 w-full h-full"
+                                    aspectRatio="aspect-square"
+                                    className="p-4"
                                 />
                             </AnimatePresence>
                             <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
@@ -145,7 +143,11 @@ const ProductDetailPage = () => {
                                     onClick={() => setMainImage(img)}
                                     className={`aspect-square bg-background-alt border rounded-2xl overflow-hidden p-2 transition-all duration-300 ${mainImage === img ? 'border-primary ring-4 ring-primary/20 scale-95 shadow-glow' : 'border-border hover:border-primary/50'}`}
                                 >
-                                    <img src={img} alt={`${product.name} ${i}`} className="w-full h-full object-contain" loading="lazy" />
+                                    <ShimmerImage
+                                        src={img}
+                                        alt={`${product.name} ${i}`}
+                                        aspectRatio="aspect-square"
+                                    />
                                 </button>
                             ))}
                         </div>

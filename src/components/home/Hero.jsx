@@ -1,8 +1,12 @@
+import { useState, useEffect, lazy, Suspense } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useTilt } from '../../hooks/useTilt';
 import { useWindowSize } from '../../hooks/useWindowSize';
 import Particles from '../animations/Particles';
-import Hero3D from '../animations/Hero3D';
+import Hero3DSkeleton from '../animations/Hero3DSkeleton';
+
+// Lazy load the 3D component to prevent blocking the main thread during initial load
+const Hero3D = lazy(() => import('../animations/Hero3D'));
 
 const Hero = () => {
     const { scrollY } = useScroll();
@@ -13,7 +17,17 @@ const Hero = () => {
     // Debug log to verify deployment
     if (isMobile) console.log('Mobile Particles Hero v3.0 (Glowing) Loaded');
 
+    const [showScene, setShowScene] = useState(false);
+    const [is3DReady, setIs3DReady] = useState(false);
     const { rotateX, rotateY, onMouseMove, onMouseLeave, onMouseEnter } = useTilt(10);
+
+    // Defer the 3D scene start to allow the main UI to hydrate and become interactive first
+    useEffect(() => {
+        if (!isMobile) {
+            const timer = setTimeout(() => setShowScene(true), 1000);
+            return () => clearTimeout(timer);
+        }
+    }, [isMobile]);
 
     const headlineVariants = {
         hidden: { x: -60, opacity: 0 },
@@ -53,13 +67,32 @@ const Hero = () => {
                 className="absolute inset-0 z-0 bg-mesh-gradient opacity-40 dark:opacity-60"
             />
 
-            {/* Layer 2: 3D Scene Background - Only render on Desktop */}
-            {!isMobile && <Hero3D isMobile={isMobile} />}
+            {/* Layer 2: 3D Scene Background with Instant Skeleton & Smooth Handoff */}
+            {!isMobile && (
+                <div className="absolute inset-0 z-0 overflow-hidden">
+                    {/* Instant Skeleton (0ms) */}
+                    <div className={`transition-opacity duration-1000 ${is3DReady ? 'opacity-0' : 'opacity-100'}`}>
+                        <Hero3DSkeleton />
+                    </div>
+
+                    {/* 3D Scene (Lazy Loaded + Fade In) */}
+                    <Suspense fallback={null}>
+                        {showScene && (
+                            <div className={`transition-opacity duration-1000 ${is3DReady ? 'opacity-100' : 'opacity-0'}`}>
+                                <Hero3D
+                                    isMobile={isMobile}
+                                    onReady={() => setIs3DReady(true)}
+                                />
+                            </div>
+                        )}
+                    </Suspense>
+                </div>
+            )}
 
             {/* Layer 3: Particles - Enabled for both mobile and desktop now */}
             <Particles
                 color="#0066FF"
-                density={isMobile ? 40 : 60}
+                density={isMobile ? 60 : 60}
                 speed={isMobile ? 1.5 : 0.8}
                 opacity={0.8}
                 isMobile={isMobile}

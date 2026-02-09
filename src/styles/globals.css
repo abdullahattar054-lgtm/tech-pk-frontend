@@ -99,8 +99,8 @@ h4,
 
   .glass {
     background: linear-gradient(135deg, var(--glass-bg) 0%, rgba(255, 255, 255, 0.05) 100%);
-    backdrop-filter: blur(24px) saturate(180%);
-    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    backdrop-filter: blur(10px) saturate(180%);
+    -webkit-backdrop-filter: blur(10px) saturate(180%);
     border-bottom: 1px solid var(--glass-border);
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   }
@@ -207,14 +207,20 @@ h4,
   }
 
   .skeleton {
-    @apply bg-background-alt animate-shimmer rounded;
-    background-image: linear-gradient(90deg,
-        rgba(255, 255, 255, 0) 0,
-        rgba(255, 255, 255, 0.2) 20%,
-        rgba(255, 255, 255, 0.5) 60%,
-        rgba(255, 255, 255, 0));
-    background-size: 200px 100%;
-    background-repeat: no-repeat;
+    @apply relative overflow-hidden bg-background-alt rounded-2xl;
+  }
+
+  .skeleton::after {
+    content: "";
+    @apply absolute inset-0;
+    background: linear-gradient(90deg,
+        transparent,
+        rgba(255, 255, 255, 0.05) 20%,
+        rgba(255, 255, 255, 0.1) 50%,
+        rgba(255, 255, 255, 0.05) 80%,
+        transparent);
+    animation: elite-shimmer 2s infinite;
+    transform: translateX(-100%);
   }
 
   /* Modal */
@@ -330,13 +336,13 @@ h4,
   }
 }
 
-@keyframes shimmer {
+@keyframes elite-shimmer {
   0% {
-    background-position: -1000px 0;
+    transform: translateX(-100%);
   }
 
   100% {
-    background-position: 1000px 0;
+    transform: translateX(100%);
   }
 }
 

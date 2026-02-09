@@ -1,6 +1,7 @@
+import { useRef, Suspense } from 'react';
+import { motion } from 'framer-motion';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Float, MeshDistortMaterial, MeshWobbleMaterial, GradientTexture, PresentationControls, Stage } from '@react-three/drei';
-import { useRef } from 'react';
 import * as THREE from 'three';
 
 const StylizedProduct = ({ isMobile }) => {
@@ -18,9 +19,9 @@ const StylizedProduct = ({ isMobile }) => {
 
     return (
         <group ref={meshRef}>
-            {/* Outer Ring / Headband influence */}
+            {/* Outer Ring / Headband influence - Optimized segments */}
             <mesh position={[0, 0, 0]} rotation={[Math.PI / 2, 0, 0]}>
-                <torusGeometry args={[1.5, 0.05, 16, isMobile ? 32 : 100]} />
+                <torusGeometry args={[1.5, 0.05, 12, isMobile ? 24 : 64]} />
                 <MeshDistortMaterial
                     color="#0066FF"
                     speed={2}
@@ -55,14 +56,14 @@ const StylizedProduct = ({ isMobile }) => {
                         Math.sin(i * 0.8) * 2
                     ]}
                 >
-                    <sphereGeometry args={[0.02, 8, 8]} />
+                    <sphereGeometry args={[0.02, 4, 4]} />
                     <meshStandardMaterial color="#0066FF" emissive="#0066FF" emissiveIntensity={2} />
                 </mesh>
             ))}
 
             {/* Subtle glass sphere container - simplify opacity/transmission on mobile if needed, or keep as is */}
             <mesh>
-                <sphereGeometry args={[2, isMobile ? 16 : 32, isMobile ? 16 : 32]} />
+                <sphereGeometry args={[2, isMobile ? 12 : 24, isMobile ? 12 : 24]} />
                 <meshPhysicalMaterial
                     transparent
                     opacity={0.1}
@@ -77,15 +78,31 @@ const StylizedProduct = ({ isMobile }) => {
     );
 };
 
-const Hero3D = ({ isMobile }) => {
+const SceneReadyEmitter = ({ onReady }) => {
+    useFrame((state) => {
+        // Once the clock starts and the first frame is requested, we consider the scene "ready"
+        if (state.clock.elapsedTime > 0 && onReady) {
+            onReady();
+        }
+    });
+    return null;
+};
+
+const Hero3D = ({ isMobile, onReady }) => {
     return (
-        <div className="w-full h-full min-h-[300px] md:min-h-[500px] absolute inset-0 z-0">
+        <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1.5, ease: "easeOut" }}
+            className="w-full h-full min-h-[300px] md:min-h-[500px] absolute inset-0 z-0"
+        >
             <Canvas
                 shadows={!isMobile}
                 camera={{ position: [0, 0, 6], fov: 45 }}
                 gl={{ antialias: !isMobile, powerPreference: "high-performance" }}
                 dpr={isMobile ? [1, 1.5] : [1, 2]} // Lower pixel ratio on mobile
             >
+                <SceneReadyEmitter onReady={onReady} />
                 <ambientLight intensity={0.5} />
                 <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1} castShadow={!isMobile} />
                 <pointLight position={[-10, -10, -10]} intensity={0.5} />
@@ -105,7 +122,7 @@ const Hero3D = ({ isMobile }) => {
                     </Float>
                 </PresentationControls>
             </Canvas>
-        </div>
+        </motion.div>
     );
 };
 

@@ -17,7 +17,7 @@ import productNothingEar from '../assets/images/product-nothing-ear.png';
 
 
 const Home = () => {
-    const { isLoading: isGlobalLoading } = useLoader(500);
+    const { isLoading: isGlobalLoading } = useLoader(0);
     const dispatch = useDispatch();
     const { products, loading: productsLoading } = useSelector((state) => state.products);
 
@@ -35,7 +35,7 @@ const Home = () => {
             <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ duration: 1 }}
+                transition={{ duration: 0.3 }}
                 className="overflow-hidden"
             >
                 {/* Hero Section */}
