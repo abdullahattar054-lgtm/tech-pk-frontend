@@ -57,9 +57,11 @@ function App() {
 
     useEffect(() => {
         // Initial Loading Screen Timing
+        // Mobile optimization: shorter timeout for lower LCP impact
+        const isMobile = window.innerWidth < 768;
         const timer = setTimeout(() => {
             setIsAppLoading(false);
-        }, 2000);
+        }, isMobile ? 1200 : 2000);
 
         return () => clearTimeout(timer);
     }, []);
