@@ -1,8 +1,8 @@
 import { Routes, Route, useLocation } from 'react-router-dom';
-import { useEffect, Suspense, lazy, useState } from 'react';
+import { useEffect, Suspense, lazy } from 'react';
 import { useDispatch } from 'react-redux';
 import { setTheme } from './redux/slices/themeSlice';
-import { AnimatePresence, motion } from 'framer-motion';
+
 
 // Components
 import Navbar from './components/common/Navbar';

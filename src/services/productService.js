@@ -1,115 +1,118 @@
 import api from './api';
 import { mockProducts } from '../data/mockProducts';
 
+/**
+ * Product service layer — handles API communication and provides
+ * graceful mock-data fallback when the API is unreachable.
+ */
 export const productService = {
-    // Get all products with filters
+    /** Fetch all products with optional filters/pagination */
     getAll: async (params = {}) => {
         try {
             const response = await api.get('/products', { params });
             return response.data;
         } catch (error) {
-            console.error('❌ Products API Error:', error.response?.status, error.response?.data || error.message);
-            console.warn('⚠️ Falling back to mock data due to API error');
+            console.warn('[ProductService] API unreachable, using mock data:', error.message);
 
-            // Client-side filtering for mock data
-            let filteredDocs = [...mockProducts];
+            // Client-side filtering for mock data fallback
+            let filtered = [...mockProducts];
 
-            // Filter by Category
             if (params.category) {
-                filteredDocs = filteredDocs.filter(p => p.category === params.category);
+                filtered = filtered.filter(p => p.category === params.category);
             }
-
-            // Filter by Price
             if (params.minPrice) {
-                filteredDocs = filteredDocs.filter(p => p.price >= Number(params.minPrice));
+                filtered = filtered.filter(p => p.price >= Number(params.minPrice));
             }
             if (params.maxPrice) {
-                filteredDocs = filteredDocs.filter(p => p.price <= Number(params.maxPrice));
+                filtered = filtered.filter(p => p.price <= Number(params.maxPrice));
             }
-
-            // Filter by Search
             if (params.search) {
-                const searchLower = params.search.toLowerCase();
-                filteredDocs = filteredDocs.filter(p =>
-                    p.name.toLowerCase().includes(searchLower) ||
-                    p.description.toLowerCase().includes(searchLower)
+                const q = params.search.toLowerCase();
+                filtered = filtered.filter(p =>
+                    p.name.toLowerCase().includes(q) ||
+                    p.description.toLowerCase().includes(q)
                 );
             }
 
             return {
                 success: true,
-                count: filteredDocs.length,
-                pagination: {},
-                data: filteredDocs,
-                _isMockData: true // Flag to indicate this is mock data
+                count: filtered.length,
+                total: filtered.length,
+                page: 1,
+                pages: 1,
+                data: filtered,
+                _isMockData: true,
             };
         }
     },
 
-    // Get single product
+    /** Fetch a single product by its ID */
     getById: async (id) => {
         try {
             const response = await api.get(`/products/${id}`);
             return response.data;
         } catch (error) {
-            console.error('❌ Product API Error:', error.response?.status, error.response?.data || error.message);
-            console.warn('⚠️ Falling back to mock data due to API error');
+            console.warn('[ProductService] API unreachable for product:', id, error.message);
             const product = mockProducts.find(p => p._id === id);
             return {
                 success: true,
                 data: product || mockProducts[0],
-                _isMockData: true
+                _isMockData: true,
             };
         }
     },
 
-    // Get products by category
+    /** Fetch products filtered by category */
     getByCategory: async (category) => {
         try {
             const response = await api.get(`/products/category/${category}`);
             return response.data;
         } catch (error) {
-            console.error('❌ Category API Error:', error.response?.status, error.response?.data || error.message);
-            console.warn('⚠️ Falling back to mock data due to API error');
+            console.warn('[ProductService] API unreachable for category:', category, error.message);
             const filtered = mockProducts.filter(p => p.category === category);
             return {
                 success: true,
                 count: filtered.length,
                 data: filtered,
-                _isMockData: true
+                _isMockData: true,
             };
         }
     },
 
-    // Search products
+    /** Search products by keyword */
     search: async (query) => {
         try {
             const response = await api.get('/products', { params: { search: query } });
             return response.data;
         } catch (error) {
-            console.error('❌ Search API Error:', error.response?.status, error.response?.data || error.message);
-            console.warn('⚠️ Falling back to mock data due to API error');
+            console.warn('[ProductService] Search API unreachable:', error.message);
+            const q = query.toLowerCase();
+            const filtered = mockProducts.filter(p =>
+                p.name.toLowerCase().includes(q) ||
+                p.description.toLowerCase().includes(q)
+            );
             return {
                 success: true,
-                data: mockProducts,
-                _isMockData: true
+                count: filtered.length,
+                data: filtered,
+                _isMockData: true,
             };
         }
     },
 
-    // Create product (admin)
+    /** Create a product (admin) */
     create: async (productData) => {
         const response = await api.post('/products', productData);
         return response.data;
     },
 
-    // Update product (admin)
+    /** Update a product (admin) */
     update: async (id, productData) => {
         const response = await api.put(`/products/${id}`, productData);
         return response.data;
     },
 
-    // Delete product (admin)
+    /** Delete a product (admin) */
     delete: async (id) => {
         const response = await api.delete(`/products/${id}`);
         return response.data;

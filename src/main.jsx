@@ -7,9 +7,10 @@ import App from './App';
 import { store } from './redux/store';
 import './styles/globals.css';
 import GoogleAuthWrapper from './components/GoogleAuthWrapper';
+import ErrorBoundary from './components/common/ErrorBoundary';
 import 'react-toastify/dist/ReactToastify.css';
 
-// Initialize theme
+// Initialize theme before first paint to prevent flash
 const savedTheme = localStorage.getItem('theme') || 'light';
 document.documentElement.classList.toggle('dark', savedTheme === 'dark');
 
@@ -20,24 +21,26 @@ window.addEventListener('load', () => {
 
 ReactDOM.createRoot(document.getElementById('root')).render(
     <React.StrictMode>
-        <Provider store={store}>
-            <GoogleAuthWrapper>
-                <BrowserRouter>
-                    <App />
-                    <ToastContainer
-                        position="top-right"
-                        autoClose={3000}
-                        hideProgressBar={false}
-                        newestOnTop
-                        closeOnClick
-                        rtl={false}
-                        pauseOnFocusLoss
-                        draggable
-                        pauseOnHover
-                        theme={savedTheme}
-                    />
-                </BrowserRouter>
-            </GoogleAuthWrapper>
-        </Provider>
+        <ErrorBoundary>
+            <Provider store={store}>
+                <GoogleAuthWrapper>
+                    <BrowserRouter>
+                        <App />
+                        <ToastContainer
+                            position="top-right"
+                            autoClose={3000}
+                            hideProgressBar={false}
+                            newestOnTop
+                            closeOnClick
+                            rtl={false}
+                            pauseOnFocusLoss
+                            draggable
+                            pauseOnHover
+                            theme={savedTheme}
+                        />
+                    </BrowserRouter>
+                </GoogleAuthWrapper>
+            </Provider>
+        </ErrorBoundary>
     </React.StrictMode>
 );

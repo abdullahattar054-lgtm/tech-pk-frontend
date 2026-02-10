@@ -1,79 +1,83 @@
 import React from 'react';
 
+/**
+ * Global Error Boundary — catches any uncaught JS errors in the React
+ * component tree and renders a user-friendly fallback instead of a blank page.
+ * This is critical for production stability.
+ */
 class ErrorBoundary extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            hasError: false,
-            error: null,
-            errorInfo: null
-        };
+        this.state = { hasError: false, error: null };
     }
 
     static getDerivedStateFromError(error) {
-        return { hasError: true };
+        return { hasError: true, error };
     }
 
     componentDidCatch(error, errorInfo) {
-        // Log error details for debugging
-        console.error('🔥 Error Boundary caught an error:', error);
-        console.error('Error Info:', errorInfo);
-
-        this.setState({
-            error,
-            errorInfo
-        });
-
-        // Send error to logging service (optional)
-        if (process.env.NODE_ENV === 'production') {
-            // logErrorToService(error, errorInfo);
-        }
+        console.error('🔥 ErrorBoundary caught:', error, errorInfo);
     }
+
+    handleReset = () => {
+        this.setState({ hasError: false, error: null });
+        window.location.href = '/';
+    };
 
     render() {
         if (this.state.hasError) {
             return (
-                <div className="min-h-screen flex flex-col items-center justify-center bg-background text-foreground p-4">
-                    <div className="max-w-md text-center">
-                        <div className="w-24 h-24 bg-error/10 rounded-full flex items-center justify-center mx-auto mb-8">
-                            <svg className="w-12 h-12 text-error" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4v.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                        </div>
-
-                        <h1 className="text-3xl font-bold mb-4">Oops! Something went wrong</h1>
-                        <p className="text-ui-muted mb-2">
-                            We're sorry for the inconvenience. An unexpected error has occurred.
-                        </p>
-
-                        {process.env.NODE_ENV === 'development' && this.state.error && (
-                            <details className="mb-8 text-left">
-                                <summary className="cursor-pointer font-bold mb-2 text-error">
-                                    Error Details (Development Only)
-                                </summary>
-                                <pre className="bg-black/30 rounded p-4 text-xs overflow-auto max-h-40 text-left">
-                                    {this.state.error.toString()}
-                                    {'\n\n'}
-                                    {this.state.errorInfo?.componentStack}
-                                </pre>
-                            </details>
-                        )}
-
-                        <div className="flex gap-4 justify-center">
-                            <button
-                                onClick={() => window.location.href = '/'}
-                                className="px-6 py-3 bg-primary text-white font-bold rounded-lg hover:shadow-lg transition-all"
-                            >
-                                Go Home
-                            </button>
-                            <button
-                                onClick={() => window.location.reload()}
-                                className="px-6 py-3 bg-secondary text-foreground font-bold rounded-lg hover:shadow-lg transition-all"
-                            >
-                                Reload Page
-                            </button>
-                        </div>
+                <div style={{
+                    minHeight: '100vh',
+                    background: '#0A0A0B',
+                    color: '#F8FAFC',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontFamily: "'Inter', system-ui, -apple-system, sans-serif",
+                    padding: '2rem',
+                    textAlign: 'center',
+                }}>
+                    <div style={{
+                        width: 64,
+                        height: 64,
+                        background: '#0066FF',
+                        borderRadius: 16,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontWeight: 900,
+                        fontSize: 24,
+                        color: 'white',
+                        marginBottom: 24,
+                    }}>
+                        T
                     </div>
+                    <h1 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: 8 }}>
+                        Something went wrong
+                    </h1>
+                    <p style={{ color: '#94A3B8', marginBottom: 24, maxWidth: 400 }}>
+                        We encountered an unexpected error. Please try refreshing the page.
+                    </p>
+                    <button
+                        onClick={this.handleReset}
+                        style={{
+                            background: '#0066FF',
+                            color: 'white',
+                            border: 'none',
+                            padding: '12px 32px',
+                            borderRadius: 12,
+                            fontSize: '1rem',
+                            fontWeight: 600,
+                            cursor: 'pointer',
+                            transition: 'opacity 0.2s',
+                        }}
+                        onMouseOver={(e) => e.target.style.opacity = '0.85'}
+                        onMouseOut={(e) => e.target.style.opacity = '1'}
+                    >
+                        Go to Homepage
+                    </button>
                 </div>
             );
         }

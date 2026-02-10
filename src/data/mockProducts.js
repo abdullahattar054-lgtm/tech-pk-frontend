@@ -1,6 +1,12 @@
+/**
+ * Mock product data used as a fallback when the API is unreachable.
+ * IDs use 24-char hex strings to match MongoDB ObjectId format,
+ * preventing CastError crashes when the frontend tries to navigate
+ * to a product detail page using a mock ID.
+ */
 export const mockProducts = [
     {
-        _id: '1',
+        _id: '65a1b2c3d4e5f6a7b8c9d001',
         name: "TechSound Pro Wireless",
         category: "Headphones",
         price: 249,
@@ -28,7 +34,7 @@ export const mockProducts = [
         status: 'active'
     },
     {
-        _id: '2',
+        _id: '65a1b2c3d4e5f6a7b8c9d002',
         name: "TechWatch Ultra Series",
         category: "Smartwatches",
         price: 199,
@@ -56,7 +62,7 @@ export const mockProducts = [
         status: 'active'
     },
     {
-        _id: '3',
+        _id: '65a1b2c3d4e5f6a7b8c9d003',
         name: "TechSound Elite Studio",
         category: "Headphones",
         price: 349,
@@ -84,7 +90,7 @@ export const mockProducts = [
         status: 'active'
     },
     {
-        _id: '4',
+        _id: '65a1b2c3d4e5f6a7b8c9d004',
         name: "SoundBuds Pro Max",
         category: "Earbuds",
         price: 129,
@@ -112,7 +118,7 @@ export const mockProducts = [
         status: 'active'
     },
     {
-        _id: '5',
+        _id: '65a1b2c3d4e5f6a7b8c9d005',
         name: "SoundBuds Essence",
         category: "Earbuds",
         price: 119,
@@ -140,7 +146,7 @@ export const mockProducts = [
         status: 'active'
     },
     {
-        _id: '6',
+        _id: '65a1b2c3d4e5f6a7b8c9d006',
         name: "TechWatch Sport Active",
         category: "Smartwatches",
         price: 179,
