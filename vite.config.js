@@ -28,6 +28,8 @@ export default defineConfig({
     },
     build: {
         sourcemap: false,
+        cssCodeSplit: true,
+        modulePreload: { polyfill: false },
         minify: 'terser',
         terserOptions: {
             compress: {
@@ -39,9 +41,12 @@ export default defineConfig({
             output: {
                 manualChunks(id) {
                     if (id.includes('node_modules')) {
+                        if (id.includes('@react-three/drei') || id.includes('@react-three/fiber')) return 'vendor-r3f';
                         if (id.includes('three')) return 'vendor-three';
                         if (id.includes('framer-motion')) return 'vendor-motion';
                         if (id.includes('lucide-react')) return 'vendor-icons';
+                        if (id.includes('react-toastify')) return 'vendor-toast';
+                        if (id.includes('aos')) return 'vendor-aos';
                         return 'vendor';
                     }
                 },

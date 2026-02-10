@@ -1,5 +1,4 @@
-/* Import Variable Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Inter:slnt,wght@-10..0,100..900&family=Poppins:wght@400;500;600;700;800;900&display=swap');
+/* Fonts are loaded non-blocking via <link> in index.html — DO NOT @import here */
 
 /* Tailwind Directives */
 @tailwind base;

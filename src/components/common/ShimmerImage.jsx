@@ -8,6 +8,9 @@ const ShimmerImage = forwardRef(({
     containerClassName = '',
     aspectRatio = 'aspect-[4/5]',
     objectFit = 'object-contain',
+    width,
+    height,
+    priority = false,
     ...props
 }, ref) => {
     const [isLoaded, setIsLoaded] = useState(false);
@@ -33,6 +36,11 @@ const ShimmerImage = forwardRef(({
                 ref={ref}
                 src={hasError ? fallbackImage : src}
                 alt={alt}
+                width={width}
+                height={height}
+                loading={priority ? 'eager' : 'lazy'}
+                decoding={priority ? 'sync' : 'async'}
+                fetchPriority={priority ? 'high' : 'auto'}
                 onLoad={() => setIsLoaded(true)}
                 onError={() => setHasError(true)}
                 className={`w-full h-full ${objectFit} transition-all duration-700 ${isLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-110'

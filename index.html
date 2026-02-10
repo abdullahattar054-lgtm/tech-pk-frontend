@@ -16,14 +16,45 @@
   <link rel="preconnect" href="https://tech-pk-backend-production.up.railway.app" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="preconnect" href="https://ui-avatars.com" />
+  <link rel="dns-prefetch" href="https://ui-avatars.com" />
+  <link rel="dns-prefetch" href="https://i.pravatar.cc" />
 
   <!-- Preload Critical Assets -->
   <link rel="preload" as="image" href="/logo-dark.svg" />
 
-  <!-- Google Fonts with Swap -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
-    rel="stylesheet">
+  <!-- Google Fonts: Non-Blocking Load (media=print → swap on load) -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Poppins:wght@600;700;800;900&display=swap"
+    rel="stylesheet" media="print" onload="this.media='all'" />
+  <noscript>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Poppins:wght@600;700;800;900&display=swap"
+      rel="stylesheet" />
+  </noscript>
+
+  <!-- Inline Critical CSS for Preloader (eliminates FOUC / blank screen) -->
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box
+    }
+
+    html {
+      background: #0A0A0B
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: #0A0A0B;
+      color: #F8FAFC;
+      overflow-x: hidden
+    }
+
+    #root {
+      min-height: 100vh
+    }
+  </style>
 </head>
 
 <body>

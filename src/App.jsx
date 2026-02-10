@@ -3,7 +3,6 @@ import { useEffect, Suspense, lazy, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { setTheme } from './redux/slices/themeSlice';
 import { AnimatePresence, motion } from 'framer-motion';
-import { SpeedInsights } from "@vercel/speed-insights/react";
 
 // Components
 import Navbar from './components/common/Navbar';
@@ -13,8 +12,10 @@ import Loader from './components/common/Loader';
 import ProductDetailSkeleton from './components/products/ProductDetailSkeleton';
 import ProductCardSkeleton from './components/products/ProductCardSkeleton';
 
-import AOS from 'aos';
-import 'aos/dist/aos.css';
+// Lazy load non-critical third-party
+const SpeedInsights = lazy(() => import('@vercel/speed-insights/react').then(m => ({ default: m.SpeedInsights })));
+// Defer AOS import — not critical for first paint
+let AOS = null;
 
 // Providers
 import { FlyToCartProvider } from './context/FlyToCartContext';
@@ -77,21 +78,32 @@ function App() {
             document.documentElement.classList.remove('dark');
         }
 
-        // Initialize AOS
-        AOS.init({
-            duration: 600,
-            easing: 'ease-out-cubic',
-            once: true,
-            mirror: false,
-            offset: 30
-        });
+        // Defer AOS initialization until browser is idle (non-critical for LCP)
+        const initAOS = () => {
+            import('aos').then((module) => {
+                import('aos/dist/aos.css');
+                AOS = module.default;
+                AOS.init({
+                    duration: 600,
+                    easing: 'ease-out-cubic',
+                    once: true,
+                    mirror: false,
+                    offset: 30
+                });
+            });
+        };
+        if ('requestIdleCallback' in window) {
+            requestIdleCallback(initAOS);
+        } else {
+            setTimeout(initAOS, 200);
+        }
     }, [dispatch]);
 
     // Scroll to top and refresh AOS on route change
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
         setTimeout(() => {
-            AOS.refresh();
+            if (AOS) AOS.refresh();
         }, 100);
     }, [location.pathname]);
 
@@ -134,7 +146,7 @@ function App() {
                         </motion.div>
                     </AnimatePresence>
                 </main>
-                <SpeedInsights />
+                <Suspense fallback={null}><SpeedInsights /></Suspense>
                 <Footer />
                 <ScrollToTop />
             </div>

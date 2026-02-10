@@ -21,7 +21,7 @@ const StylizedProduct = ({ isMobile }) => {
         <group ref={meshRef}>
             {/* Outer Ring / Headband influence - Optimized segments */}
             <mesh position={[0, 0, 0]} rotation={[Math.PI / 2, 0, 0]}>
-                <torusGeometry args={[1.5, 0.05, 12, isMobile ? 24 : 64]} />
+                <torusGeometry args={[1.5, 0.05, 8, isMobile ? 16 : 64]} />
                 <MeshDistortMaterial
                     color="#0066FF"
                     speed={2}
@@ -63,7 +63,7 @@ const StylizedProduct = ({ isMobile }) => {
 
             {/* Subtle glass sphere container - simplify opacity/transmission on mobile if needed, or keep as is */}
             <mesh>
-                <sphereGeometry args={[2, isMobile ? 12 : 24, isMobile ? 12 : 24]} />
+                <sphereGeometry args={[2, isMobile ? 8 : 24, isMobile ? 8 : 24]} />
                 <meshPhysicalMaterial
                     transparent
                     opacity={0.1}
@@ -95,12 +95,14 @@ const Hero3D = ({ isMobile, onReady }) => {
             animate={{ opacity: 1 }}
             transition={{ duration: 1.5, ease: "easeOut" }}
             className="w-full h-full min-h-[300px] md:min-h-[500px] absolute inset-0 z-0"
+            style={{ willChange: 'transform' }}
         >
             <Canvas
                 shadows={!isMobile}
+                frameloop={isMobile ? 'demand' : 'always'}
                 camera={{ position: [0, 0, 6], fov: 45 }}
                 gl={{ antialias: !isMobile, powerPreference: "high-performance" }}
-                dpr={isMobile ? [1, 1.5] : [1, 2]} // Lower pixel ratio on mobile
+                dpr={isMobile ? 1 : [1, 2]}
             >
                 <SceneReadyEmitter onReady={onReady} />
                 <ambientLight intensity={0.5} />
