@@ -62,7 +62,7 @@ function App() {
         const isMobile = window.innerWidth < 768;
         const timer = setTimeout(() => {
             setIsAppLoading(false);
-        }, isMobile ? 1200 : 2000);
+        }, isMobile ? 500 : 800);
 
         return () => clearTimeout(timer);
     }, []);

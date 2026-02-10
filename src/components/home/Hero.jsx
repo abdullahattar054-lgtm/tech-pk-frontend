@@ -2,11 +2,11 @@ import { useState, useEffect, lazy, Suspense } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useTilt } from '../../hooks/useTilt';
 import { useWindowSize } from '../../hooks/useWindowSize';
-import Particles from '../animations/Particles';
 import Hero3DSkeleton from '../animations/Hero3DSkeleton';
 
-// Lazy load the 3D component to prevent blocking the main thread during initial load
+// Lazy load heavy canvas components to unblock main thread during LCP
 const Hero3D = lazy(() => import('../animations/Hero3D'));
+const Particles = lazy(() => import('../animations/Particles'));
 
 const Hero = () => {
     const { scrollY } = useScroll();
@@ -24,7 +24,7 @@ const Hero = () => {
     // Defer the 3D scene start to allow the main UI to hydrate and become interactive first
     useEffect(() => {
         if (!isMobile) {
-            const timer = setTimeout(() => setShowScene(true), 1000);
+            const timer = setTimeout(() => setShowScene(true), 3000);
             return () => clearTimeout(timer);
         }
     }, [isMobile]);
@@ -89,15 +89,17 @@ const Hero = () => {
                 </div>
             )}
 
-            {/* Layer 3: Particles - Enabled for both mobile and desktop now */}
-            <Particles
-                color="#0066FF"
-                density={isMobile ? 60 : 60}
-                speed={isMobile ? 1.5 : 0.8}
-                opacity={0.8}
-                isMobile={isMobile}
-                connectDistance={isMobile ? 0 : 150}
-            />
+            {/* Layer 3: Particles - Lazy loaded to not block first paint */}
+            <Suspense fallback={null}>
+                <Particles
+                    color="#0066FF"
+                    density={isMobile ? 60 : 60}
+                    speed={isMobile ? 1.5 : 0.8}
+                    opacity={0.8}
+                    isMobile={isMobile}
+                    connectDistance={isMobile ? 0 : 150}
+                />
+            </Suspense>
 
             {/* Layer 4: Foreground Content with Tilt Effect */}
             <motion.div
@@ -151,7 +153,7 @@ const Hero = () => {
                             <div className="flex -space-x-3">
                                 {[1, 2, 3, 4].map(i => (
                                     <div key={i} className={`rounded-full border-2 border-background bg-secondary flex items-center justify-center text-[10px] text-foreground overflow-hidden shadow-sm ${isMobile ? 'w-8 h-8' : 'w-10 h-10'}`}>
-                                        <img src={`https://i.pravatar.cc/150?u=${i}`} alt="user" className="w-full h-full object-cover" />
+                                        <img src={`https://i.pravatar.cc/150?u=${i}`} alt="user" loading="lazy" className="w-full h-full object-cover" />
                                     </div>
                                 ))}
                             </div>

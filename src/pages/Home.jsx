@@ -9,11 +9,11 @@ import ProductCardSkeleton from '../components/products/ProductCardSkeleton';
 import Loader from '../components/common/Loader';
 import { useLoader } from '../hooks/useLoader';
 
-// Import local product images for fallback/categories
-import productAirpods from '../assets/images/product-airpods.png';
-import productWatch from '../assets/images/product-watch.png';
-import productHeadsetBlack from '../assets/images/product-headset-black.png';
-import productNothingEar from '../assets/images/product-nothing-ear.png';
+// Product images referenced via URL for lazy loading — NOT statically imported
+const productAirpods = new URL('../assets/images/product-airpods.png', import.meta.url).href;
+const productWatch = new URL('../assets/images/product-watch.png', import.meta.url).href;
+const productHeadsetBlack = new URL('../assets/images/product-headset-black.png', import.meta.url).href;
+const productNothingEar = new URL('../assets/images/product-nothing-ear.png', import.meta.url).href;
 
 
 const Home = () => {
@@ -168,6 +168,7 @@ const Home = () => {
                                         <img
                                             src={category.image}
                                             alt={category.name}
+                                            loading="lazy"
                                             className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 opacity-90 dark:opacity-80"
                                         />
                                         <div className="relative z-20 h-full flex flex-col justify-end p-10 text-left">
