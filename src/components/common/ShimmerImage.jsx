@@ -19,17 +19,11 @@ const ShimmerImage = forwardRef(({
     const fallbackImage = 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800';
 
     return (
-        <div className={`relative overflow-hidden ${aspectRatio} ${containerClassName}`}>
+        <div className={`relative overflow-hidden ${aspectRatio} ${containerClassName} bg-white/5`}>
             {/* Shimmer Placeholder */}
-            <AnimatePresence>
-                {!isLoaded && !hasError && (
-                    <motion.div
-                        initial={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        className="absolute inset-0 z-10 skeleton"
-                    />
-                )}
-            </AnimatePresence>
+            {!isLoaded && !hasError && (
+                <div className="absolute inset-0 z-10 skeleton-pulse bg-white/5" />
+            )}
 
             {/* Actual Image */}
             <img
@@ -43,7 +37,7 @@ const ShimmerImage = forwardRef(({
                 fetchPriority={priority ? 'high' : 'auto'}
                 onLoad={() => setIsLoaded(true)}
                 onError={() => setHasError(true)}
-                className={`w-full h-full ${objectFit} transition-all duration-700 ${isLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-110'
+                className={`w-full h-full ${objectFit} transition-all duration-400 ease-out ${isLoaded ? 'opacity-100 scale-100 blur-0' : 'opacity-0 scale-[1.02] blur-sm'
                     } ${className}`}
                 {...props}
             />

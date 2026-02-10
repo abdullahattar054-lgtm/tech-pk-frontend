@@ -11,7 +11,7 @@ import Magnetic from '../animations/Magnetic';
 import SpringyTouch from '../animations/SpringyTouch';
 import { useFlyToCart } from '../../context/FlyToCartContext';
 
-const ProductCard = memo(({ product }) => {
+const ProductCard = memo(({ product, priority = false }) => {
     const { rotateX, rotateY, onMouseMove, onMouseLeave } = useTilt(12);
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -82,6 +82,7 @@ const ProductCard = memo(({ product }) => {
                             ref={imgRef}
                             src={displayImage}
                             alt={product.name}
+                            priority={priority}
                             className="drop-shadow-2xl group-hover:scale-110"
                             style={{ transform: 'translateZ(30px)' }}
                         />

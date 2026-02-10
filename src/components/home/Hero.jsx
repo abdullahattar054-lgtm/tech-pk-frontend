@@ -67,34 +67,54 @@ const Hero = () => {
                 className="absolute inset-0 z-0 bg-mesh-gradient opacity-40 dark:opacity-60"
             />
 
-            {/* Layer 2: 3D Scene Background with Instant Skeleton & Smooth Handoff */}
-            {!isMobile && (
-                <div className="absolute inset-0 z-0 overflow-hidden">
-                    {/* Instant Skeleton (0ms) */}
-                    <div className={`transition-opacity duration-1000 ${is3DReady ? 'opacity-0' : 'opacity-100'}`}>
-                        <Hero3DSkeleton />
-                    </div>
+            {/* Layer 2: 3D Scene (Desktop) or Static Fallback (Mobile) */}
+            <div className="absolute inset-0 z-0 overflow-hidden">
+                {!isMobile ? (
+                    <>
+                        {/* Instant Skeleton (0ms) */}
+                        <div className={`transition-opacity duration-1000 ${is3DReady ? 'opacity-0' : 'opacity-100'}`}>
+                            <Hero3DSkeleton />
+                        </div>
 
-                    {/* 3D Scene (Lazy Loaded + Fade In) */}
-                    <Suspense fallback={null}>
-                        {showScene && (
-                            <div className={`transition-opacity duration-1000 ${is3DReady ? 'opacity-100' : 'opacity-0'}`}>
-                                <Hero3D
-                                    isMobile={isMobile}
-                                    onReady={() => setIs3DReady(true)}
-                                />
-                            </div>
-                        )}
-                    </Suspense>
-                </div>
-            )}
+                        {/* 3D Scene (Lazy Loaded + Fade In) */}
+                        <Suspense fallback={null}>
+                            {showScene && (
+                                <div className={`transition-opacity duration-1000 ${is3DReady ? 'opacity-100' : 'opacity-0'}`}>
+                                    <Hero3D
+                                        isMobile={isMobile}
+                                        onReady={() => setIs3DReady(true)}
+                                    />
+                                </div>
+                            )}
+                        </Suspense>
+                    </>
+                ) : (
+                    /* Mobile High-Priority Static Image */
+                    <motion.div
+                        initial={{ opacity: 0, scale: 1.1 }}
+                        animate={{ opacity: 0.8, scale: 1 }}
+                        transition={{ duration: 1.2, ease: "easeOut" }}
+                        className="absolute inset-0 flex items-center justify-center p-10 pt-40"
+                    >
+                        <img
+                            src="https://images.unsplash.com/photo-1588333390623-0498363768ce?w=1000&q=80"
+                            alt="AirPods Pro"
+                            className="w-full h-auto max-w-[400px] object-contain drop-shadow-[0_0_50px_rgba(0,102,255,0.3)] filter brightness-110 contrast-110"
+                            loading="eager"
+                            fetchpriority="high"
+                            decoding="sync"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
+                    </motion.div>
+                )}
+            </div>
 
-            {/* Layer 3: Particles - Lazy loaded to not block first paint */}
+            {/* Layer 3: Particles - Optimized density for mobile mobile performance */}
             <Suspense fallback={null}>
                 <Particles
                     color="#0066FF"
-                    density={isMobile ? 60 : 60}
-                    speed={isMobile ? 1.5 : 0.8}
+                    density={isMobile ? 30 : 60}
+                    speed={isMobile ? 1.0 : 0.8}
                     opacity={0.8}
                     isMobile={isMobile}
                     connectDistance={isMobile ? 0 : 150}

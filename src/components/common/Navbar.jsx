@@ -163,43 +163,78 @@ const Navbar = () => {
                     </div>
                 </div>
 
-                {/* Mobile Menu */}
+                {/* Mobile Menu Overlay */}
                 <AnimatePresence>
                     {mobileMenuOpen && (
                         <motion.div
-                            initial={{ opacity: 0, height: 0 }}
-                            animate={{ opacity: 1, height: 'auto' }}
-                            exit={{ opacity: 0, height: 0 }}
-                            className="md:hidden border-t border-border glass"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="fixed inset-0 z-[60] glass-dark md:hidden"
                         >
-                            <div className="px-4 py-6 space-y-4">
-                                {['Home', 'Products', 'About', 'Contact', 'Blog'].map((item) => (
-                                    <Link
-                                        key={item}
-                                        to={item === 'Home' ? '/' : `/${item.toLowerCase()}`}
-                                        onClick={() => setMobileMenuOpen(false)}
-                                        className="block py-4 text-lg font-bold text-foreground hover:text-primary transition-colors border-b border-border/10 last:border-0"
-                                    >
-                                        {item}
-                                    </Link>
-                                ))}
-                                <div className="pt-4 border-t border-border">
-                                    {isAuthenticated ? (
-                                        <div className="flex items-center justify-between">
-                                            <Link to="/profile" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3">
-                                                <img src={`https://ui-avatars.com/api/?name=${user?.name}&background=0066FF&color=fff`} className="w-10 h-10 rounded-full" alt="profile" />
-                                                <span className="font-bold text-foreground">{user?.name}</span>
+                            <div className="flex flex-col h-full p-8 pt-24 space-y-8">
+                                <button
+                                    onClick={() => setMobileMenuOpen(false)}
+                                    className="absolute top-6 right-6 p-3 rounded-2xl bg-white/5 border border-white/10"
+                                >
+                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+
+                                <div className="space-y-6">
+                                    {['Home', 'Products', 'About', 'Contact', 'Blog'].map((item, i) => (
+                                        <motion.div
+                                            key={item}
+                                            initial={{ opacity: 0, x: -20 }}
+                                            animate={{ opacity: 1, x: 0 }}
+                                            transition={{ delay: i * 0.1 }}
+                                        >
+                                            <Link
+                                                to={item === 'Home' ? '/' : `/${item.toLowerCase()}`}
+                                                onClick={() => setMobileMenuOpen(false)}
+                                                className="block text-4xl font-black text-foreground hover:text-primary transition-colors tracking-tighter"
+                                            >
+                                                {item}
                                             </Link>
-                                            <button onClick={() => { handleLogout(); setMobileMenuOpen(false); }} className="text-sm font-bold text-primary">
-                                                Logout
+                                        </motion.div>
+                                    ))}
+                                </div>
+
+                                <motion.div
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.5 }}
+                                    className="mt-auto pt-8 border-t border-white/10"
+                                >
+                                    {isAuthenticated ? (
+                                        <div className="flex flex-col gap-6">
+                                            <Link to="/profile" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-4">
+                                                <div className="w-14 h-14 rounded-full border-2 border-primary p-0.5">
+                                                    <img src={`https://ui-avatars.com/api/?name=${user?.name}&background=0066FF&color=fff`} className="w-full h-full rounded-full" alt="profile" />
+                                                </div>
+                                                <div>
+                                                    <p className="font-bold text-xl">{user?.name}</p>
+                                                    <p className="text-sm text-muted-foreground">{user?.email}</p>
+                                                </div>
+                                            </Link>
+                                            <button
+                                                onClick={() => { handleLogout(); setMobileMenuOpen(false); }}
+                                                className="w-full py-5 bg-white/5 border border-white/10 rounded-2xl font-bold hover:bg-white/10 transition-all active:scale-95"
+                                            >
+                                                Sign Out
                                             </button>
                                         </div>
                                     ) : (
-                                        <Link to="/login" onClick={() => setMobileMenuOpen(false)} className="block w-full py-3 bg-primary text-white text-center font-bold rounded-xl">
-                                            Login
+                                        <Link
+                                            to="/login"
+                                            onClick={() => setMobileMenuOpen(false)}
+                                            className="block w-full py-5 bg-primary text-white text-center font-black rounded-2xl shadow-glow active:scale-95 transition-all text-lg"
+                                        >
+                                            Login / Get Started
                                         </Link>
                                     )}
-                                </div>
+                                </motion.div>
                             </div>
                         </motion.div>
                     )}

@@ -100,7 +100,7 @@ const Home = () => {
                                         }}
                                         transition={{ duration: 0.5 }}
                                     >
-                                        <ProductCard product={product} />
+                                        <ProductCard product={product} priority={index < 2} />
                                     </motion.div>
                                 ))
                             ) : (
