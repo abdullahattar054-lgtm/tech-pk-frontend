@@ -1,72 +1,169 @@
 export const mockProducts = [
     {
         _id: '1',
-        name: 'AirPods Pro Max',
-        description: 'High-fidelity audio, active noise cancellation, and transparency mode for a premium sound experience.',
-        category: 'Headphones',
-        price: 549,
-        originalPrice: 599,
-        brand: 'Apple',
-        images: ['https://images.unsplash.com/photo-1613040809024-b4ef7ba99bc3?q=80&w=2070&auto=format&fit=crop'],
+        name: "TechSound Pro Wireless",
+        category: "Headphones",
+        price: 249,
+        originalPrice: 299,
+        brand: "TechSound",
+        description: "Professional grade wireless headphones featuring advanced active noise cancellation, 40-hour battery life, and premium comfort for long sessions.",
+        images: ["/images/products/headphones-pro-black.png"],
         colors: [
-            { name: 'Space Gray', value: '#3c3d3a', images: ['https://images.unsplash.com/photo-1613040809024-b4ef7ba99bc3?q=80&w=2070&auto=format&fit=crop'] },
-            { name: 'Silver', value: '#e3e4e5', images: ['https://images.unsplash.com/photo-1583394838336-acd977736f90?q=80&w=2000&auto=format&fit=crop'] }
+            {
+                name: "Black",
+                value: "#000000",
+                images: ["/images/products/headphones-pro-black.png"]
+            },
+            {
+                name: "Pearl White",
+                value: "#F5F5F5",
+                images: ["/images/products/headphones-pro-white.png"]
+            }
         ],
-        stock: 15,
-        ratings: { average: 4.8, count: 124 },
+        stock: 45,
+        rating: 4.8,
+        numReviews: 156,
+        ratings: { average: 4.8, count: 156 },
         featured: true,
         status: 'active'
     },
     {
         _id: '2',
-        name: 'Apple Watch Ultra 2',
-        description: 'The most rugged and capable Apple Watch. Designed for endurance, exploration, and adventure.',
-        category: 'Smartwatches',
-        price: 799,
-        originalPrice: 849,
-        brand: 'Apple',
-        images: ['https://images.unsplash.com/photo-1546868871-7041f2a55e12?q=80&w=1964&auto=format&fit=crop'],
+        name: "TechWatch Ultra Series",
+        category: "Smartwatches",
+        price: 199,
+        originalPrice: 249,
+        brand: "TechWatch",
+        description: "Advanced wearable technology with comprehensive health metrics, GPS tracking, and a stunning 1.9-inch AMOLED display.",
+        images: ["/images/products/smartwatch-ultra-black.png"],
         colors: [
-            { name: 'Titanium', value: '#d1d1d1', images: ['https://images.unsplash.com/photo-1546868871-7041f2a55e12?q=80&w=1964&auto=format&fit=crop'] }
+            {
+                name: "Obsidian Black",
+                value: "#1C1C1E",
+                images: ["/images/products/smartwatch-ultra-black.png"]
+            },
+            {
+                name: "Porcelain White",
+                value: "#FFFFFF",
+                images: ["/images/products/smartwatch-ultra-white.png"]
+            }
         ],
-        stock: 8,
-        ratings: { average: 4.9, count: 85 },
+        stock: 50,
+        rating: 4.5,
+        numReviews: 120,
+        ratings: { average: 4.5, count: 120 },
         featured: true,
         status: 'active'
     },
     {
         _id: '3',
-        name: 'Sony WH-1000XM5',
-        description: 'Industry-leading noise cancellation and exceptional sound quality in a sleek, comfortable design.',
-        category: 'Headphones',
-        price: 399,
-        originalPrice: 429,
-        brand: 'Sony',
-        images: ['https://images.unsplash.com/photo-1618366712010-f4ae9c647dcb?q=80&w=1888&auto=format&fit=crop'],
+        name: "TechSound Elite Studio",
+        category: "Headphones",
+        price: 349,
+        originalPrice: 399,
+        brand: "TechSound",
+        description: "Studio-quality audio reproduction with wide frequency response. Experience pure, uncoloured sound with zero distortion.",
+        images: ["/images/products/headphones-studio-black.png"],
         colors: [
-            { name: 'Black', value: '#1a1a1a', images: ['https://images.unsplash.com/photo-1618366712010-f4ae9c647dcb?q=80&w=1888&auto=format&fit=crop'] },
-            { name: 'Platinum Silver', value: '#d8d8d8', images: ['https://images.unsplash.com/photo-1583394838336-acd977736f90?q=80&w=2000&auto=format&fit=crop'] }
+            {
+                name: "Midnight Black",
+                value: "#1A1A1A",
+                images: ["/images/products/headphones-studio-black.png"]
+            },
+            {
+                name: "Crimson Red",
+                value: "#E74C3C",
+                images: ["/images/products/headphones-studio-red.png"]
+            }
         ],
-        stock: 20,
-        ratings: { average: 4.7, count: 210 },
+        stock: 30,
+        rating: 4.9,
+        numReviews: 89,
+        ratings: { average: 4.9, count: 89 },
         featured: true,
         status: 'active'
     },
     {
         _id: '4',
-        name: 'Nothing Ear (2)',
-        description: 'Ultra-light, powerful sound, and a unique transparent design for the tech-conscious listener.',
-        category: 'Earbuds',
-        price: 149,
-        originalPrice: 179,
-        brand: 'Nothing',
-        images: ['https://images.unsplash.com/photo-1627989330618-ff353493e878?q=80&w=2000&auto=format&fit=crop'],
+        name: "SoundBuds Pro Max",
+        category: "Earbuds",
+        price: 129,
+        originalPrice: 159,
+        brand: "SoundBuds",
+        description: "High-fidelity true wireless earbuds with immersive spatial audio, transparency mode, and ergonomic design for all-day wear.",
+        images: ["/images/products/earbuds-pro-black.png"],
         colors: [
-            { name: 'White', value: '#fcfcfc', images: ['https://images.unsplash.com/photo-1627989330618-ff353493e878?q=80&w=2000&auto=format&fit=crop'] },
-            { name: 'Black', value: '#0a0a0a', images: ['https://images.unsplash.com/photo-1631430212621-e07085731309?q=80&w=2000&auto=format&fit=crop'] }
+            {
+                name: "Phantom Black",
+                value: "#000000",
+                images: ["/images/products/earbuds-pro-black.png"]
+            },
+            {
+                name: "Ceramic White",
+                value: "#FFFFFF",
+                images: ["/images/products/earbuds-pro-white.png"]
+            }
         ],
-        stock: 30,
-        ratings: { average: 4.5, count: 56 },
+        stock: 100,
+        rating: 4.8,
+        numReviews: 320,
+        ratings: { average: 4.8, count: 320 },
+        featured: true,
+        status: 'active'
+    },
+    {
+        _id: '5',
+        name: "SoundBuds Essence",
+        category: "Earbuds",
+        price: 119,
+        originalPrice: 149,
+        brand: "SoundBuds",
+        description: "Lightweight and powerful everyday buds. Crystal clear calls and punchy bass in a minimalist package.",
+        images: ["/images/products/earbuds-essence-white.png"],
+        colors: [
+            {
+                name: "Arctic White",
+                value: "#F8F9FA",
+                images: ["/images/products/earbuds-essence-white.png"]
+            },
+            {
+                name: "Sky Blue",
+                value: "#87CEEB",
+                images: ["/images/products/earbuds-essence-blue.png"]
+            }
+        ],
+        stock: 90,
+        rating: 4.7,
+        numReviews: 195,
+        ratings: { average: 4.7, count: 195 },
+        featured: true,
+        status: 'active'
+    },
+    {
+        _id: '6',
+        name: "TechWatch Sport Active",
+        category: "Smartwatches",
+        price: 179,
+        originalPrice: 219,
+        brand: "TechWatch",
+        description: "Rugged and vibrant. Designed for the active lifestyle with extended battery life and high-precision heart rate monitoring.",
+        images: ["/images/products/smartwatch-ultra-grey.png"],
+        colors: [
+            {
+                name: "Titanium Grey",
+                value: "#8E8E93",
+                images: ["/images/products/smartwatch-ultra-grey.png"]
+            },
+            {
+                name: "Dynamic Orange",
+                value: "#FF9500",
+                images: ["/images/products/smartwatch-sport-orange.png"]
+            }
+        ],
+        stock: 40,
+        rating: 4.6,
+        numReviews: 85,
+        ratings: { average: 4.6, count: 85 },
         featured: true,
         status: 'active'
     }

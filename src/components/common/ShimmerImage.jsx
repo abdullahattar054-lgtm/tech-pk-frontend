@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState, forwardRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const ShimmerImage = ({
+const ShimmerImage = forwardRef(({
     src,
     alt,
     className = '',
@@ -9,7 +9,7 @@ const ShimmerImage = ({
     aspectRatio = 'aspect-[4/5]',
     objectFit = 'object-contain',
     ...props
-}) => {
+}, ref) => {
     const [isLoaded, setIsLoaded] = useState(false);
     const [hasError, setHasError] = useState(false);
 
@@ -30,6 +30,7 @@ const ShimmerImage = ({
 
             {/* Actual Image */}
             <img
+                ref={ref}
                 src={hasError ? fallbackImage : src}
                 alt={alt}
                 onLoad={() => setIsLoaded(true)}
@@ -43,6 +44,8 @@ const ShimmerImage = ({
             <div className="absolute inset-0 pointer-events-none bg-gradient-to-tr from-white/5 to-transparent opacity-30" />
         </div>
     );
-};
+});
+
+ShimmerImage.displayName = 'ShimmerImage';
 
 export default ShimmerImage;
