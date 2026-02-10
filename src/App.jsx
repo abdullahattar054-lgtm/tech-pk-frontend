@@ -8,7 +8,6 @@ import { AnimatePresence, motion } from 'framer-motion';
 import Navbar from './components/common/Navbar';
 import Footer from './components/common/Footer';
 import ScrollToTop from './components/common/ScrollToTop';
-import Loader from './components/common/Loader';
 import ProductDetailSkeleton from './components/products/ProductDetailSkeleton';
 import ProductCardSkeleton from './components/products/ProductCardSkeleton';
 
@@ -54,21 +53,9 @@ const PageSkeleton = () => (
 function App() {
     const dispatch = useDispatch();
     const location = useLocation();
-    const [isAppLoading, setIsAppLoading] = useState(true);
 
     useEffect(() => {
-        // Initial Loading Screen Timing
-        // Mobile optimization: shorter timeout for lower LCP impact
-        const isMobile = window.innerWidth < 768;
-        const timer = setTimeout(() => {
-            setIsAppLoading(false);
-        }, isMobile ? 500 : 800);
-
-        return () => clearTimeout(timer);
-    }, []);
-
-    useEffect(() => {
-        // Initialize theme from localStorage
+        // Initialize theme from localStorage pronto
         const savedTheme = localStorage.getItem('theme') || 'dark';
         dispatch(setTheme(savedTheme));
 
@@ -77,7 +64,9 @@ function App() {
         } else {
             document.documentElement.classList.remove('dark');
         }
+    }, [dispatch]);
 
+    useEffect(() => {
         // Defer AOS initialization until browser is idle (non-critical for LCP)
         const initAOS = () => {
             import('aos').then((module) => {
@@ -97,7 +86,7 @@ function App() {
         } else {
             setTimeout(initAOS, 200);
         }
-    }, [dispatch]);
+    }, []);
 
     // Scroll to top and refresh AOS on route change
     useEffect(() => {
@@ -109,42 +98,29 @@ function App() {
 
     return (
         <FlyToCartProvider>
-            {/* Global Loader - Restored by user request for "Cool factor" */}
-            <Loader show={isAppLoading} />
-
             <div className="min-h-screen flex flex-col bg-background text-foreground selection:bg-primary/30 transition-colors duration-300">
                 <div className="ui-noise" />
                 <Navbar />
                 <main className="flex-grow pt-20 overflow-hidden">
-                    <AnimatePresence mode="wait">
-                        <motion.div
-                            key={location.pathname}
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            transition={{ duration: 0.2, ease: 'easeOut' }}
-                        >
-                            <Suspense fallback={<PageSkeleton />}>
-                                <Routes location={location} key={location.pathname}>
-                                    <Route path="/" element={<Home />} />
-                                    <Route path="/products" element={<ProductsPage />} />
-                                    <Route path="/product/:id" element={<ProductDetailPage />} />
-                                    <Route path="/cart" element={<CartPage />} />
-                                    <Route path="/checkout" element={<CheckoutPage />} />
-                                    <Route path="/wishlist" element={<WishlistPage />} />
-                                    <Route path="/login" element={<LoginPage />} />
-                                    <Route path="/signup" element={<SignupPage />} />
-                                    <Route path="/orders" element={<OrdersPage />} />
-                                    <Route path="/profile/*" element={<ProfilePage />} />
-                                    <Route path="/admin/*" element={<AdminPanel />} />
-                                    <Route path="/about" element={<AboutPage />} />
-                                    <Route path="/contact" element={<ContactPage />} />
-                                    <Route path="/blog" element={<BlogPage />} />
-                                    <Route path="*" element={<NotFoundPage />} />
-                                </Routes>
-                            </Suspense>
-                        </motion.div>
-                    </AnimatePresence>
+                    <Suspense fallback={<PageSkeleton />}>
+                        <Routes location={location} key={location.pathname}>
+                            <Route path="/" element={<Home />} />
+                            <Route path="/products" element={<ProductsPage />} />
+                            <Route path="/product/:id" element={<ProductDetailPage />} />
+                            <Route path="/cart" element={<CartPage />} />
+                            <Route path="/checkout" element={<CheckoutPage />} />
+                            <Route path="/wishlist" element={<WishlistPage />} />
+                            <Route path="/login" element={<LoginPage />} />
+                            <Route path="/signup" element={<SignupPage />} />
+                            <Route path="/orders" element={<OrdersPage />} />
+                            <Route path="/profile/*" element={<ProfilePage />} />
+                            <Route path="/admin/*" element={<AdminPanel />} />
+                            <Route path="/about" element={<AboutPage />} />
+                            <Route path="/contact" element={<ContactPage />} />
+                            <Route path="/blog" element={<BlogPage />} />
+                            <Route path="*" element={<NotFoundPage />} />
+                        </Routes>
+                    </Suspense>
                 </main>
                 <Suspense fallback={null}><SpeedInsights /></Suspense>
                 <Footer />

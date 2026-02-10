@@ -6,8 +6,6 @@ import { fetchProducts } from '../redux/slices/productSlice';
 import Hero from '../components/home/Hero';
 import ProductCard from '../components/products/ProductCard';
 import ProductCardSkeleton from '../components/products/ProductCardSkeleton';
-import Loader from '../components/common/Loader';
-import { useLoader } from '../hooks/useLoader';
 
 // Product images referenced via URL for lazy loading — NOT statically imported
 const productAirpods = new URL('../assets/images/product-airpods.png', import.meta.url).href;
@@ -17,7 +15,6 @@ const productNothingEar = new URL('../assets/images/product-nothing-ear.png', im
 
 
 const Home = () => {
-    const { isLoading: isGlobalLoading } = useLoader(0);
     const dispatch = useDispatch();
     const { products, loading: productsLoading } = useSelector((state) => state.products);
 
@@ -25,12 +22,10 @@ const Home = () => {
         dispatch(fetchProducts({ limit: 4, featured: true }));
     }, [dispatch]);
 
-    const isLoading = isGlobalLoading;
     const isProductsLoading = productsLoading;
 
     return (
         <div className="min-h-screen bg-background">
-            <Loader show={isLoading} />
 
             <motion.div
                 initial={{ opacity: 0 }}

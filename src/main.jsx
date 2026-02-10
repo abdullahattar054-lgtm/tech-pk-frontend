@@ -13,6 +13,11 @@ import 'react-toastify/dist/ReactToastify.css';
 const savedTheme = localStorage.getItem('theme') || 'light';
 document.documentElement.classList.toggle('dark', savedTheme === 'dark');
 
+// Hide HTML preloader once React starts
+window.addEventListener('load', () => {
+    document.body.classList.add('loaded');
+});
+
 ReactDOM.createRoot(document.getElementById('root')).render(
     <React.StrictMode>
         <Provider store={store}>

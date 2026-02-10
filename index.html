@@ -54,10 +54,92 @@
     #root {
       min-height: 100vh
     }
+
+    /* Nitro Preloader: Zero-JS Paint */
+    #nitro-preloader {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: #0A0A0B;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.6s ease-out, visibility 0.6s;
+    }
+
+    .nitro-logo {
+      width: 64px;
+      height: 64px;
+      background: #0066FF;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: system-ui, -apple-system, sans-serif;
+      font-weight: 900;
+      font-size: 24px;
+      color: white;
+      margin-bottom: 32px;
+      box-shadow: 0 0 30px rgba(0, 102, 255, 0.3);
+      animation: nitro-pulse 2s ease-in-out infinite;
+    }
+
+    .nitro-bar {
+      height: 2px;
+      width: 48px;
+      background: rgba(0, 102, 255, 0.2);
+      border-radius: 99px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .nitro-bar::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 40%;
+      background: #0066FF;
+      animation: nitro-slide 1.5s linear infinite;
+    }
+
+    @keyframes nitro-pulse {
+
+      0%,
+      100% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.05);
+      }
+    }
+
+    @keyframes nitro-slide {
+      0% {
+        left: -40%;
+      }
+
+      100% {
+        left: 100%;
+      }
+    }
+
+    .loaded #nitro-preloader {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
   </style>
 </head>
 
 <body>
+  <div id="nitro-preloader">
+    <div class="nitro-logo">T</div>
+    <div class="nitro-bar"></div>
+  </div>
   <div id="root"></div>
   <script type="module" src="/src/main.jsx"></script>
 </body>
